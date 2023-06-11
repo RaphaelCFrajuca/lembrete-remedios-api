@@ -17,9 +17,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          
+      - name: 'Auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
       - name: Configure gcloud CLI
-        uses: google-github-actions/deploy-appengine@main
+        uses: google-github-actions/deploy-appengine@v1
         with:
           version: '344.0.0'
           credentials: ${{ secrets.GCLOUD_AUTH }}
