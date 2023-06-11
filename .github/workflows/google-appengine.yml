@@ -24,8 +24,7 @@ jobs:
           version: '344.0.0'
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
           project_id: bedi-lembrete-remedios
-          default_region: southamerica-east1-a
-
+          
       - name: Install dependencies
         run: npm install
 
