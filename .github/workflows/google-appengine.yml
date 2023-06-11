@@ -19,14 +19,10 @@ jobs:
           node-version: 16
 
       - name: Configure gcloud CLI
-        uses: google-github-actions/setup-gcloud@v0.2.0
+        uses: google-github-actions/deploy-appengine@main
         with:
           version: '344.0.0'
-          service_account_key: ${{ secrets.GCLOUD_AUTH }}
-          project_id: bedi-lembrete-remedios
-          additional-path: '/opt/hostedtoolcache/gcloud/344.0.0/x64/bin'
-          additional-env: |
-            CLOUDSDK_PYTHON=/usr/bin/python3
+          credentials: ${{ secrets.GCLOUD_AUTH }}
           
       - name: Install dependencies
         run: npm install
