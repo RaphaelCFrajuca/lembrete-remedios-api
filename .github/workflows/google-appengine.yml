@@ -25,6 +25,8 @@ jobs:
 
       - name: Configure gcloud CLI
         uses: google-github-actions/deploy-appengine@v1
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         with:
           env_vars: |-
             MONGODB_URI=${{ secrets.MONGODB_URI }}
