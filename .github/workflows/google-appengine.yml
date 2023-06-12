@@ -16,7 +16,7 @@ jobs:
       - id: generate_dotenv_file
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: echo "$MONGODB_URI" > .env-for-app-yaml
+        run: echo "MONGODB_URI=$MONGODB_URI" > .env-for-app-yaml
   
       - id: prepare-app-yaml
         uses: mshick/fast-envsubst@v1
@@ -26,7 +26,7 @@ jobs:
           out-file: app.yaml
 
       - name: Show app.yaml
-        run: cat app.yaml
+        run: cat .env-for-app-yaml app.yaml
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
