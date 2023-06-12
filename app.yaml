@@ -1,4 +1,2 @@
-instance_class: B1
-service: lembrete-remedios-api
-basic_scaling:
-  max_instances: 1
+runtime: nodejs16
+name: lembrete-remedios-api
