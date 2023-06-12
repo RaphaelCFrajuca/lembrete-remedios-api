@@ -17,7 +17,10 @@ jobs:
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DATABASE_NAME: ${{ vars.MONGODB_DATABASE_NAME }}
-        run: echo "MONGODB_URI=$MONGODB_URI" > .env-for-app-yaml
+        run: |-
+          echo "MONGODB_URI=$MONGODB_URI" > .env-for-app-yaml
+          echo "MONGODB_DATABASE_NAME=$MONGODB_DATABASE_NAME" > .env-for-app-yaml
+        
   
       - name: Prepare app.yaml
         uses: mshick/fast-envsubst@v1
