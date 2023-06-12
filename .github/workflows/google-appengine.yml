@@ -25,6 +25,9 @@ jobs:
 
       - name: Configure gcloud CLI
         uses: google-github-actions/deploy-appengine@v1
+        with:
+          env_vars: |-
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
           
       - name: Install dependencies
         run: npm install
