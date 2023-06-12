@@ -27,7 +27,6 @@ jobs:
         uses: google-github-actions/deploy-appengine@v1
         with:
           version: '344.0.0'
-          credentials: ${{ secrets.GCLOUD_AUTH }}
           
       - name: Install dependencies
         run: npm install
