@@ -7,7 +7,6 @@ export class MedicationsController {
 
     @Get()
     async getMedicationsList(): Promise<{ value: string; label: string }[]> {
-        console.log(await this.medicationsService.getMedicationsList());
         return await this.medicationsService.getMedicationsList();
     }
 }

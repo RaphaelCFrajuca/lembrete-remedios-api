@@ -6,6 +6,7 @@ export class MongoDBService {
     constructor(@Inject("MONGODB_URI") private readonly mongoDbUri: string) {}
 
     async returnConfig(): Promise<DataSource> {
+        console.log(this.mongoDbUri);
         const dataSource = new DataSource({
             type: "mongodb",
             url: this.mongoDbUri,

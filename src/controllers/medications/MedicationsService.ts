@@ -10,7 +10,7 @@ export class MedicationsService {
         return medicationList
             .map(medication => ({ value: medication.nome, label: medication.nome }))
             .filter((value, index, self) => {
-                return self.indexOf(value) === index;
+                return index === self.findIndex(obj => obj.value === value.value && obj.label === value.label);
             });
     }
 }
