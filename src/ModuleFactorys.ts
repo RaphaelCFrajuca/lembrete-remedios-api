@@ -1,7 +1,5 @@
 import { DatabaseProvider } from "./database/DatabaseProvider";
-import { MongoDBService } from "./database/services/MongoDBService";
-import { MySQLService } from "./database/services/MySQLService";
-import { DatabaseProviderType } from "./types/DatabaseProviderType";
+import { DatabaseProviderMap, DatabaseProviderType } from "./types/DatabaseProviderType";
 import { Logger } from "./utils/Logger";
 
 export function databaseFactory(
@@ -18,10 +16,6 @@ export function databaseFactory(
         Logger.warn(`No database provider setted, using default ${DatabaseProviderType.DEFAULT} provider`, { databaseProvider, this: this });
         databaseProvider = DatabaseProviderType.DEFAULT;
     }
-
-    if (databaseProvider === DatabaseProviderType.MONGODB) {
-        return new DatabaseProvider(new MongoDBService(mongoDbUri, mongoDbDatabaseName));
-    } else if (databaseProvider === DatabaseProviderType.MYSQL) {
-        return new DatabaseProvider(new MySQLService(mysqlHost, mysqlPort, mysqlUserName, mysqlPassword, mysqlDatabaseName));
-    }
+    const provider = DatabaseProviderMap[databaseProvider];
+    return new DatabaseProvider(provider.factory([mongoDbUri, mongoDbDatabaseName, mysqlHost, mysqlPort, mysqlUserName, mysqlPassword, mysqlDatabaseName]));
 }
