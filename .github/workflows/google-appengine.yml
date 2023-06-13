@@ -15,11 +15,29 @@ jobs:
 
       - name: Generate env file
         env:
+          DATABASE_PROVIDER: ${{ vars.DATABASE_PROVIDER }}
+
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DATABASE_NAME: ${{ vars.MONGODB_DATABASE_NAME }}
+
+          MYSQL_HOST: ${{ vars.MYSQL_HOST }}
+          MYSQL_PORT: ${{ vars.MYSQL_PORT }}
+          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE_NAME: ${{ vars.MYSQL_DATABASE_NAME }}
         run: |-
-          echo "MONGODB_URI=$MONGODB_URI" > .env-for-app-yaml
+          echo "DATABASE_PROVIDER=$DATABASE_PROVIDER" > .env-for-app-yaml
+
+          echo "MONGODB_URI=$MONGODB_URI" >> .env-for-app-yaml
           echo "MONGODB_DATABASE_NAME=$MONGODB_DATABASE_NAME" >> .env-for-app-yaml
+
+          echo "MYSQL_HOST=$MYSQL_HOST" >> .env-for-app-yaml
+          echo "MYSQL_PORT=$MYSQL_PORT" >> .env-for-app-yaml
+          echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .env-for-app-yaml
+          echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env-for-app-yaml
+          echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
+
+          
         
   
       - name: Prepare app.yaml

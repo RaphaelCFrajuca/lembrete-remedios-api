@@ -13,7 +13,11 @@ import { MedicationsService } from "./controllers/medications/MedicationsService
         DatabaseProvider,
         MongoDBService,
         MedicationsService,
-        { provide: "DATABASE_SERVICE", useFactory: databaseFactory, inject: ["MONGODB_URI", "MONGODB_DATABASE_NAME"] },
+        {
+            provide: "DATABASE_SERVICE",
+            useFactory: databaseFactory,
+            inject: ["DATABASE_PROVIDER", "MONGODB_URI", "MONGODB_DATABASE_NAME", "MYSQL_HOST", "MYSQL_PORT", "MYSQL_USERNAME", "MYSQL_PASSWORD", "MYSQL_DATABASE_NAME"],
+        },
     ],
 })
 export class LembreteRemediosModule {}
