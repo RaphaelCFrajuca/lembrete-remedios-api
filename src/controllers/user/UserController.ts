@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Query, Request, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
 import { UserService } from "src/services/UserService";
 import { FindUserDto } from "../dto/FindUserDto";
 import { UserGuard } from "src/guards/UserGuard";
@@ -27,7 +27,7 @@ export class UserController {
         return await this.userService.registerUser(userDto);
     }
 
-    @Post("update")
+    @Put("update")
     @UseGuards(UserGuard)
     async update(@Body() userDto: UserDto, @Res() res: Response) {
         const serviceResponse = await this.userService.updateUser(userDto);
