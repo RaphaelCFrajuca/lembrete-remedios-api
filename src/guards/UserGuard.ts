@@ -10,14 +10,13 @@ export class UserGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
-        console.log(token);
         if (!token) {
             Logger.error(`No JWT token provided`, request);
             throw new UnauthorizedException();
         }
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                publicKey: this.jwtPublicCert,
+                secret: this.jwtPublicCert,
             });
             request["user"] = payload;
             Logger.log(`User ${payload.email} authenticated`, request);
