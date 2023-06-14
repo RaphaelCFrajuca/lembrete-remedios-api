@@ -10,9 +10,20 @@ import { CustomException } from "src/utils/Errors/CustomException";
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get("find")
+    @Get()
     @UseGuards(UserGuard)
     async find(@Query() findUserDto: FindUserDto, @Request() request) {
+        const user = await this.userService.findByEmail(findUserDto.email ?? request.user?.email);
+        if (!user) {
+            throw new CustomException(`User ${findUserDto.email} not exists`, HttpStatus.NOT_FOUND);
+        } else {
+            return user;
+        }
+    }
+
+    @Get("validate")
+    @UseGuards(UserGuard)
+    async findByEmail(@Query() findUserDto: FindUserDto, @Request() request) {
         const user = await this.userService.findByEmail(findUserDto.email ?? request.user?.email);
         if (!user) {
             throw new CustomException(`User ${findUserDto.email} not exists`, HttpStatus.NOT_FOUND);
