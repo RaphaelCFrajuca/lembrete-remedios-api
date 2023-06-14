@@ -25,6 +25,8 @@ jobs:
           MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE_NAME: ${{ vars.MYSQL_DATABASE_NAME }}
+
+          JWT_PUBLIC_CERT: ${{ secrets.JWT_PUBLIC_CERT }}
         run: |-
           echo "DATABASE_PROVIDER=$DATABASE_PROVIDER" > .env-for-app-yaml
 
@@ -36,6 +38,8 @@ jobs:
           echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .env-for-app-yaml
           echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env-for-app-yaml
           echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
+
+          echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
 
           
         

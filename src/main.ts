@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { LembreteRemediosModule } from "./LembreteRemediosModule";
 import * as dotenv from "dotenv";
+import "reflect-metadata";
 
 async function bootstrap() {
     dotenv.config();

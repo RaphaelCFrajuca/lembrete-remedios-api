@@ -36,7 +36,21 @@ import { ConfigModule } from "@nestjs/config";
             provide: "MYSQL_DATABASE_NAME",
             useValue: process.env.MYSQL_DATABASE_NAME,
         },
+        {
+            provide: "JWT_PUBLIC_CERT",
+            useValue: process.env.JWT_PUBLIC_CERT,
+        },
     ],
-    exports: ["MONGODB_URI", "MONGODB_DATABASE_NAME", "DATABASE_PROVIDER", "MYSQL_HOST", "MYSQL_PORT", "MYSQL_USERNAME", "MYSQL_PASSWORD", "MYSQL_DATABASE_NAME"],
+    exports: [
+        "MONGODB_URI",
+        "MONGODB_DATABASE_NAME",
+        "DATABASE_PROVIDER",
+        "MYSQL_HOST",
+        "MYSQL_PORT",
+        "MYSQL_USERNAME",
+        "MYSQL_PASSWORD",
+        "MYSQL_DATABASE_NAME",
+        "JWT_PUBLIC_CERT",
+    ],
 })
 export class EnvironmentModule {}

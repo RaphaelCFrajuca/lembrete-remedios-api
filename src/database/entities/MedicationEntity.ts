@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn } from "typeorm";
 
-@Entity()
-export class Medications {
+@Entity("medications")
+export class MedicationEntity {
     @Column()
     principioAtivo: string;
 
