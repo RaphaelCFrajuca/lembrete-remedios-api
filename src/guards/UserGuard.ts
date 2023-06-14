@@ -11,7 +11,7 @@ export class UserGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            Logger.error(`No JWT token provided`, request);
+            Logger.error(`No JWT token provided`, [request, this]);
             throw new UnauthorizedException();
         }
         try {
@@ -19,9 +19,9 @@ export class UserGuard implements CanActivate {
                 secret: this.jwtPublicCert,
             });
             request["user"] = payload;
-            Logger.log(`User ${payload.email} authenticated`, request);
+            Logger.log(`User ${payload.email} authenticated`, [request, this]);
         } catch {
-            Logger.error(`Unauthorized`, request);
+            Logger.error(`Unauthorized`, [request, this]);
             throw new UnauthorizedException();
         }
         return true;

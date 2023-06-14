@@ -40,9 +40,6 @@ jobs:
           echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
 
           echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
-
-          
-        
   
       - name: Prepare app.yaml
         uses: mshick/fast-envsubst@v1
@@ -63,11 +60,6 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
-
-      - name: Configure gcloud CLI
-        uses: google-github-actions/deploy-appengine@v1
-        with:
-          project_id: ${{ secrets.PROJECT_ID }}
           
       - name: Install dependencies
         run: npm install
@@ -75,5 +67,7 @@ jobs:
       - name: Build the Nest.js app
         run: npm run build
 
-      - name: Deploy to App Engine
-        run: gcloud app deploy
+      - name: Configure gcloud CLI
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
