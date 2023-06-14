@@ -30,7 +30,7 @@ export class MySQLService implements Database {
     async registerUser(user: User): Promise<void> {
         const mysqlManager = await this.getDataSource();
         await mysqlManager.getRepository(UserEntity).save(user);
-        Logger.log(`User ${user.email} registred`, user);
+        Logger.log(`User ${user.email} registered`, user);
     }
 
     async findUserByEmail(email: string): Promise<User | null> {
