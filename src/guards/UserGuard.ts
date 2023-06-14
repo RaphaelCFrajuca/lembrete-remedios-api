@@ -7,6 +7,16 @@ import { Logger } from "src/utils/Logger";
 export class UserGuard implements CanActivate {
     constructor(private jwtService: JwtService, @Inject("JWT_PUBLIC_CERT") private readonly jwtPublicCert: string) {}
 
+    formatMultilineCert(cert: string): string {
+        cert = cert.replace("-----BEGIN PUBLIC KEY-----", "");
+        cert = cert.replace("-----END PUBLIC KEY-----", "");
+        cert = cert.trim();
+
+        const lines = cert.match(/.{1,64}/g) || [];
+        const formattedCert = "-----BEGIN PUBLIC KEY-----\n" + lines.join("\n") + "\n-----END PUBLIC KEY-----";
+        return formattedCert;
+    }
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
@@ -16,7 +26,7 @@ export class UserGuard implements CanActivate {
         }
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: this.jwtPublicCert,
+                secret: this.formatMultilineCert(this.jwtPublicCert),
             });
             request["user"] = payload;
             Logger.log(`User ${payload.email} authenticated`, [request, this]);
