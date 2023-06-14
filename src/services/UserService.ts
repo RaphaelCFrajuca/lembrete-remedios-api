@@ -24,7 +24,7 @@ export class UserService {
 
     async updateUser(user: User) {
         Logger.log(`Updating user (${user.email})`, this);
-        await this.databaseService.registerUser(user);
+        await this.databaseService.updateUser(user);
         return {
             status: "success",
             code: HttpStatus.ACCEPTED,

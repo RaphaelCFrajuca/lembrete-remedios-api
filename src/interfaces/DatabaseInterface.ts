@@ -6,4 +6,5 @@ export interface Database {
     findUserByEmail(email: string): Promise<User | null>;
     registerUser(user: User): Promise<void>;
     deleteUser(email: string): Promise<void>;
+    updateUser(user: User): Promise<void>;
 }

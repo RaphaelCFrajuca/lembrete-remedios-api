@@ -33,6 +33,13 @@ export class MySQLService implements Database {
         Logger.log(`User ${user.email} registered`, user);
     }
 
+    async updateUser(user: User): Promise<void> {
+        const { nickname, name, picture, email, email_verified } = user;
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.getRepository(UserEntity).update({ email: user.email }, { nickname, name, picture, email, email_verified });
+        Logger.log(`User ${user.email} updated`, user);
+    }
+
     async findUserByEmail(email: string): Promise<User | null> {
         const mysqlManager = await this.getDataSource();
         return await mysqlManager.getRepository(UserEntity).findOneBy({ email });

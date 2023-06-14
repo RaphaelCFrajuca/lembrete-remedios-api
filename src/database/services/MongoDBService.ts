@@ -27,6 +27,13 @@ export class MongoDBService implements Database {
         Logger.log(`User ${user.email} registered`, user);
     }
 
+    async updateUser(user: User): Promise<void> {
+        const { nickname, name, picture, email, email_verified } = user;
+        const mongoManager = await this.getDataSource();
+        await mongoManager.getMongoRepository(UserEntityMongo).update({ email: user.email }, { nickname, name, picture, email, email_verified });
+        Logger.log(`User ${user.email} updated`, user);
+    }
+
     async findUserByEmail(email: string): Promise<User | null> {
         const mongoManager = await this.getDataSource();
         return await mongoManager.getMongoRepository(UserEntityMongo).findOneBy({ email });

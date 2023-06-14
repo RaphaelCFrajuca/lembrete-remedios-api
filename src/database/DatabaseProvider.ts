@@ -5,6 +5,10 @@ import { User } from "src/interfaces/UserInterface";
 export class DatabaseProvider implements Database {
     constructor(private readonly provider: Database) {}
 
+    async updateUser(user: User): Promise<void> {
+        return await this.provider.updateUser(user);
+    }
+
     async deleteUser(email: string): Promise<void> {
         return await this.provider.deleteUser(email);
     }
