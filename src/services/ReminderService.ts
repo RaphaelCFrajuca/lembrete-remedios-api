@@ -163,7 +163,7 @@ export class ReminderService {
             await this.update(newReminders, email);
             return {
                 status: "success",
-                code: HttpStatus.CREATED,
+                code: HttpStatus.ACCEPTED,
                 message: `Reminders of ${email} updated`,
             };
         }
@@ -182,7 +182,7 @@ export class ReminderService {
         await this.databaseService.deleteReminders(reminders, email);
         return {
             status: "success",
-            code: HttpStatus.ACCEPTED,
+            code: HttpStatus.OK,
             message: `Reminders of ${email} deleted`,
         };
     }

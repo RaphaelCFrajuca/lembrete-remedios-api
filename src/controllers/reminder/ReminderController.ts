@@ -18,7 +18,7 @@ export class ReminderController {
         }
         const reminders = await this.reminderService.get(findReminderDto.email);
         if (reminders) {
-            res.status(HttpStatus.FOUND).json(reminders);
+            res.status(HttpStatus.OK).json(reminders);
         } else {
             res.status(HttpStatus.NOT_FOUND).json();
         }
