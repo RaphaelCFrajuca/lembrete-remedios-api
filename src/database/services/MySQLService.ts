@@ -22,7 +22,7 @@ export class MySQLService implements Database {
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mysqlManager = await this.getDataSource();
         const reminders = await mysqlManager.getRepository(ReminderEntityMySQL).findOneBy({ email });
-        return JSON.parse(reminders.reminders) ?? [];
+        return JSON.parse(reminders?.reminders) ?? null;
     }
 
     async newReminders(reminders: ReminderUser[], email: string): Promise<void> {
@@ -38,7 +38,9 @@ export class MySQLService implements Database {
     }
 
     async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
-        await this.updateReminders(reminders, email);
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.getRepository(ReminderEntityMySQL).delete({ email });
+        Logger.log(`Reminders of ${email} deleted`, reminders);
     }
 
     async deleteUser(email: string): Promise<void> {

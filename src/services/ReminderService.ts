@@ -150,8 +150,8 @@ export class ReminderService {
 
     async new(body: ReminderBase, email: string) {
         const actualReminders = await this.databaseService.getReminders(email);
-        if (actualReminders.length === 0) {
-            const newReminders = this.updateRemindersObject(body, actualReminders);
+        if (actualReminders === null) {
+            const newReminders = this.updateRemindersObject(body, []);
             await this.databaseService.newReminders(newReminders, email);
             return {
                 status: "success",
@@ -179,7 +179,12 @@ export class ReminderService {
     }
 
     async delete(reminders: ReminderUser[], email: string) {
-        await this.databaseService.deleteReminders(reminders, email);
+        if (reminders.length !== 0) {
+            await this.update(reminders, email);
+        } else {
+            await this.databaseService.deleteReminders(reminders, email);
+        }
+
         return {
             status: "success",
             code: HttpStatus.OK,

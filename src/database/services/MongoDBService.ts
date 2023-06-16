@@ -17,7 +17,7 @@ export class MongoDBService implements Database {
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mongoManager = await this.getDataSource();
         const reminders = await mongoManager.getMongoRepository(ReminderEntityMongo).findOneBy({ email });
-        return reminders?.reminders ?? [];
+        return reminders?.reminders ?? null;
     }
 
     async newReminders(reminders: ReminderUser[], email: string): Promise<void> {
@@ -33,7 +33,9 @@ export class MongoDBService implements Database {
     }
 
     async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
-        await this.updateReminders(reminders, email);
+        const mongoManager = await this.getDataSource();
+        await mongoManager.getMongoRepository(ReminderEntityMongo).delete({ email });
+        Logger.log(`Reminders of ${email} deleted`, reminders);
     }
 
     async deleteUser(email: string): Promise<void> {
