@@ -7,9 +7,34 @@ import { UserEntity, UserEntityMongo } from "../entities/UserEntity";
 import { User } from "src/interfaces/UserInterface";
 import { CustomException } from "src/utils/Errors/CustomException";
 import { Logger } from "src/utils/Logger";
+import { Reminder } from "src/interfaces/ReminderInterface";
+import { ReminderEntityMongo } from "../entities/ReminderEntity";
+import { ReminderUser } from "src/interfaces/ReminderInterface";
 
 export class MongoDBService implements Database {
     constructor(@Inject("MONGODB_URI") private readonly mongoDbUri: string, @Inject("MONGODB_DATABASE_NAME") private readonly mongoDbDatabaseName: string) {}
+
+    async getReminders(email: string): Promise<ReminderUser[]> {
+        const mongoManager = await this.getDataSource();
+        const reminders = await mongoManager.getMongoRepository(ReminderEntityMongo).findOneBy({ email });
+        return reminders?.reminders ?? [];
+    }
+
+    async newReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        const mongoManager = await this.getDataSource();
+        await mongoManager.getMongoRepository(ReminderEntityMongo).save({ reminders: reminders as ReminderUser[], email });
+        Logger.log(`Reminders of ${email} saved`, reminders);
+    }
+
+    async updateReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        const mongoManager = await this.getDataSource();
+        await mongoManager.getMongoRepository(ReminderEntityMongo).update({ email }, { reminders: reminders as ReminderUser[], email });
+        Logger.log(`Reminders of ${email} updated`, reminders);
+    }
+
+    async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        await this.updateReminders(reminders, email);
+    }
 
     async deleteUser(email: string): Promise<void> {
         const user = await this.findUserByEmail(email);
@@ -53,7 +78,7 @@ export class MongoDBService implements Database {
         const dataSource = new DataSource({
             type: "mongodb",
             url: this.mongoDbUri,
-            entities: [MedicationEntity, UserEntity, UserEntityMongo],
+            entities: [MedicationEntity, UserEntity, UserEntityMongo, ReminderEntityMongo],
             synchronize: false,
             logging: false,
             database: this.mongoDbDatabaseName,

@@ -32,9 +32,9 @@ export class UserController {
         }
     }
 
-    @Post("register")
+    @Post("new")
     @UseGuards(UserGuard)
-    async register(@Body() userDto: UserDto) {
+    async new(@Body() userDto: UserDto) {
         return await this.userService.registerUser(userDto);
     }
 

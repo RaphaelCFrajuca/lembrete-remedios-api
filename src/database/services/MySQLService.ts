@@ -7,6 +7,8 @@ import { User } from "src/interfaces/UserInterface";
 import { UserEntity } from "../entities/UserEntity";
 import { CustomException } from "src/utils/Errors/CustomException";
 import { Logger } from "src/utils/Logger";
+import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
+import { ReminderEntity, ReminderEntityMySQL } from "../entities/ReminderEntity";
 
 export class MySQLService implements Database {
     constructor(
@@ -16,6 +18,28 @@ export class MySQLService implements Database {
         @Inject("MYSQL_PASSWORD") private readonly password: string,
         @Inject("MYSQL_DATABASE_NAME") private readonly databaseName: string,
     ) {}
+
+    async getReminders(email: string): Promise<ReminderUser[]> {
+        const mysqlManager = await this.getDataSource();
+        const reminders = await mysqlManager.getRepository(ReminderEntityMySQL).findOneBy({ email });
+        return JSON.parse(reminders.reminders) ?? [];
+    }
+
+    async newReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.getRepository(ReminderEntityMySQL).save({ reminders: JSON.stringify(reminders), email });
+        Logger.log(`Reminders of ${email} saved`, reminders);
+    }
+
+    async updateReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.getRepository(ReminderEntityMySQL).update({ email }, { reminders: JSON.stringify(reminders), email });
+        Logger.log(`Reminders of ${email} updated`, reminders);
+    }
+
+    async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        await this.updateReminders(reminders, email);
+    }
 
     async deleteUser(email: string): Promise<void> {
         const user = await this.findUserByEmail(email);
@@ -62,7 +86,7 @@ export class MySQLService implements Database {
             port: this.port,
             username: this.userName,
             password: this.password,
-            entities: [MedicationEntity, UserEntity],
+            entities: [MedicationEntity, UserEntity, ReminderEntity, ReminderEntityMySQL],
             synchronize: false,
             logging: false,
             database: this.databaseName,

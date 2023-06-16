@@ -1,9 +1,26 @@
 import { Database } from "src/interfaces/DatabaseInterface";
 import { Medication } from "src/interfaces/MedicationInterface";
+import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
 import { User } from "src/interfaces/UserInterface";
 
 export class DatabaseProvider implements Database {
     constructor(private readonly provider: Database) {}
+
+    async getReminders(email: string): Promise<ReminderUser[]> {
+        return await this.provider.getReminders(email);
+    }
+
+    async newReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        return await this.provider.newReminders(reminders, email);
+    }
+
+    async updateReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        return await this.provider.updateReminders(reminders, email);
+    }
+
+    async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
+        return await this.provider.deleteReminders(reminders, email);
+    }
 
     async updateUser(user: User): Promise<void> {
         return await this.provider.updateUser(user);
