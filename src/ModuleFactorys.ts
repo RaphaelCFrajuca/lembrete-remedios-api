@@ -27,30 +27,39 @@ export function channelFactory(
     smsProvider: SmsChannelProviderType,
     voiceMailProvider: VoiceMailChannelProviderType,
     brevoApiKey: string,
+    brevoApiUrl: string,
     mobizonApiKey: string,
+    mobizonApiUrl: string,
     nvoipSid: string,
     nvoipUserToken: string,
+    nvoipApiUrl: string,
 ) {
     const provider = {};
 
     Object.defineProperty(provider, "email", {
         get: () =>
             new ChannelProvider(
-                ChannelProviderMap[ChannelProviderType.EMAIL].factory([emailProvider, smsProvider, voiceMailProvider, brevoApiKey, mobizonApiKey, nvoipSid, nvoipUserToken]),
+                ChannelProviderMap[ChannelProviderType.EMAIL].factory(
+                    [brevoApiKey, brevoApiUrl, mobizonApiKey, mobizonApiUrl, nvoipSid, nvoipUserToken, nvoipApiUrl],
+                    emailProvider,
+                ),
             ),
     });
 
     Object.defineProperty(provider, "sms", {
         get: () =>
             new ChannelProvider(
-                ChannelProviderMap[ChannelProviderType.SMS].factory([emailProvider, smsProvider, voiceMailProvider, brevoApiKey, mobizonApiKey, nvoipSid, nvoipUserToken]),
+                ChannelProviderMap[ChannelProviderType.SMS].factory([brevoApiKey, brevoApiUrl, mobizonApiKey, mobizonApiUrl, nvoipSid, nvoipUserToken, nvoipApiUrl], smsProvider),
             ),
     });
 
     Object.defineProperty(provider, "voicemail", {
         get: () =>
             new ChannelProvider(
-                ChannelProviderMap[ChannelProviderType.VOICEMAIL].factory([emailProvider, smsProvider, voiceMailProvider, brevoApiKey, mobizonApiKey, nvoipSid, nvoipUserToken]),
+                ChannelProviderMap[ChannelProviderType.VOICEMAIL].factory(
+                    [brevoApiKey, brevoApiUrl, mobizonApiKey, mobizonApiUrl, nvoipSid, nvoipUserToken, nvoipApiUrl],
+                    voiceMailProvider,
+                ),
             ),
     });
 

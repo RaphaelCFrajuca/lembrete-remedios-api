@@ -1,12 +1,19 @@
 import { ChannelProvider } from "src/channels/ChannelProvider";
-import { ReminderToSchedule } from "./ReminderInterface";
+import { ReminderMedication, ReminderToSchedule } from "./ReminderInterface";
 
 export interface Channel {
-    send(reminderToSchedule: ReminderToSchedule);
+    send(messageData: MessageData);
+}
+
+export interface MessageData {
+    name: string;
+    email: string;
+    phone: string;
+    reminder: ReminderMedication;
 }
 
 export interface ChannelService {
     email: ChannelProvider;
     sms: ChannelProvider;
-    voiceMail: ChannelProvider;
+    voicemail: ChannelProvider;
 }

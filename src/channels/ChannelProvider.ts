@@ -1,10 +1,9 @@
-import { Channel } from "src/interfaces/ChannelInterface";
-import { ReminderToSchedule } from "src/interfaces/ReminderInterface";
+import { Channel, MessageData } from "src/interfaces/ChannelInterface";
 
 export class ChannelProvider implements Channel {
     constructor(private readonly provider: Channel) {}
 
-    send(reminderToSchedule: ReminderToSchedule) {
-        return this.provider.send(reminderToSchedule);
+    send(messageData: MessageData) {
+        return this.provider.send(messageData);
     }
 }

@@ -68,6 +68,18 @@ import { ConfigModule } from "@nestjs/config";
             provide: "NVOIP_USER_TOKEN",
             useValue: process.env.NVOIP_USER_TOKEN,
         },
+        {
+            provide: "BREVO_API_URL",
+            useValue: process.env.BREVO_API_URL,
+        },
+        {
+            provide: "MOBIZON_API_URL",
+            useValue: process.env.MOBIZON_API_URL,
+        },
+        {
+            provide: "NVOIP_API_URL",
+            useValue: process.env.NVOIP_API_URL,
+        },
     ],
     exports: [
         "MONGODB_URI",
@@ -86,6 +98,9 @@ import { ConfigModule } from "@nestjs/config";
         "MOBIZON_API_KEY",
         "NVOIP_SID",
         "NVOIP_USER_TOKEN",
+        "BREVO_API_URL",
+        "MOBIZON_API_URL",
+        "NVOIP_API_URL",
     ],
 })
 export class EnvironmentModule {}

@@ -2,8 +2,7 @@ import { HttpStatus, Inject } from "@nestjs/common";
 import { DatabaseProvider } from "src/database/DatabaseProvider";
 import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "src/interfaces/ReminderInterface";
 import { Logger } from "src/utils/Logger";
-import { UserService } from "./UserService";
-import { ChannelService } from "src/interfaces/ChannelInterface";
+import { ChannelService, MessageData } from "src/interfaces/ChannelInterface";
 
 export class ReminderService {
     constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider, @Inject("CHANNEL_SERVICE") private readonly channelService: ChannelService) {}
@@ -233,7 +232,6 @@ export class ReminderService {
                                 reminderMedication.push(reminder);
                                 remindersToSchedule.push({
                                     email: item.email,
-
                                     name: reminderUser.name,
                                     reminders: reminderMedication,
                                 });
@@ -252,11 +250,34 @@ export class ReminderService {
             reminder.phone = (await this.databaseService.findUserByEmail(reminder.email)).phone;
         }
         Logger.log("Scheduling reminders for Pub/Sub Provider", { remindersToSchedule, this: this });
-        //this.channelService.email.send(remindersToSchedule[0]);
-        return {
-            status: "success",
-            code: HttpStatus.CREATED,
-            message: `Reminders scheduled`,
-        };
+
+        try {
+            const messagesToPublish: MessageData[] = remindersToSchedule.map(item => {
+                return item.reminders.map(reminder => {
+                    return {
+                        name: item.name,
+                        phone: item.phone,
+                        email: item.email,
+                        reminder: {
+                            medication: reminder.medication,
+                            hour: reminder.hour,
+                        },
+                    };
+                })[0];
+            });
+            await this.channelService.voicemail.send(messagesToPublish[0]);
+            return {
+                status: "success",
+                code: HttpStatus.CREATED,
+                message: `Reminders scheduled`,
+            };
+        } catch (error) {
+            Logger.error(error.response, { remindersToSchedule, this: this });
+            return {
+                status: "error",
+                code: error.status,
+                message: error.response,
+            };
+        }
     }
 }

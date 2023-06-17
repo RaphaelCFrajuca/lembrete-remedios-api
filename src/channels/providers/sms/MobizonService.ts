@@ -1,10 +1,20 @@
-import { Channel } from "src/interfaces/ChannelInterface";
-import { ReminderToSchedule } from "src/interfaces/ReminderInterface";
+import { HttpStatus } from "@nestjs/common";
+import axios from "axios";
+import { Channel, MessageData } from "src/interfaces/ChannelInterface";
+import { CustomException } from "src/utils/Errors/CustomException";
 
 export class MobizonService implements Channel {
-    constructor(private readonly apiKey: string) {}
+    constructor(private readonly apiKey: string, private readonly apiUrl: string) {}
 
-    send(reminderToSchedule: ReminderToSchedule) {
-        throw new Error("Method not implemented.");
+    async send(messageData: MessageData) {
+        try {
+            const payloadData = {
+                recipient: messageData.phone,
+                text: `Olá ${messageData.name.split(" ")[0]}, aqui é o Lembrete Remédios, você deve tomar ${messageData.reminder.medication} agora!`,
+            };
+            return (await axios.post(`${this.apiUrl}?apiKey=${this.apiKey}`, payloadData)).data;
+        } catch (error) {
+            throw new CustomException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

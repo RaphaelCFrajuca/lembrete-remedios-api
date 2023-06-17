@@ -1,7 +1,7 @@
 export interface ReminderMedication {
-    uniqueId: number;
-    level: number;
-    key: number;
+    uniqueId?: number;
+    level?: number;
+    key?: number;
     medication: string;
     hour: string;
 }

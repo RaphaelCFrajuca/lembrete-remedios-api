@@ -33,7 +33,7 @@ export const ChannelProviderMap = {
             }
 
             if (emailProvider === EmailChannelProviderType.BREVO) {
-                return new BrevoService(args[0]);
+                return new BrevoService(args[0], args[1]);
             }
         },
     },
@@ -45,7 +45,7 @@ export const ChannelProviderMap = {
             }
 
             if (smsProvider === SmsChannelProviderType.MOBIZON) {
-                return new MobizonService(args[1]);
+                return new MobizonService(args[2], args[3]);
             }
         },
     },
@@ -57,7 +57,7 @@ export const ChannelProviderMap = {
             }
 
             if (voiceMailProvider === VoiceMailChannelProviderType.NVOIP) {
-                return new NvoipService(args[2], args[3]);
+                return new NvoipService(args[4], args[5], args[6]);
             }
         },
     },
