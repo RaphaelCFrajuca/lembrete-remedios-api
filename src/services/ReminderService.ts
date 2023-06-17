@@ -269,7 +269,7 @@ export class ReminderService {
 
         try {
             const messagesToPublish: MessageData[] = remindersToSchedule.map(item => {
-                return item.reminders.map(reminder => {
+                return item.reminders.map((reminder: ReminderMedication) => {
                     return {
                         name: item.name,
                         phone: item.phone,
@@ -278,7 +278,7 @@ export class ReminderService {
                         reminder: {
                             medication: reminder.medication,
                             hour: reminder.hour,
-                        },
+                        } as ReminderMedication,
                     };
                 })[0];
             });
