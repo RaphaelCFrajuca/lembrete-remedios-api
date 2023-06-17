@@ -27,6 +27,22 @@ jobs:
           MYSQL_DATABASE_NAME: ${{ vars.MYSQL_DATABASE_NAME }}
 
           JWT_PUBLIC_CERT: ${{ secrets.JWT_PUBLIC_CERT }}
+
+          PUBSUB_PROVIDER: ${{ vars.PUBSUB_PROVIDER }}
+          GOOGLE_PUBSUB_TOPIC_NAME: ${{ vars.GOOGLE_PUBSUB_TOPIC_NAME }}
+
+          EMAIL_CHANNEL_PROVIDER: ${{ vars.EMAIL_CHANNEL_PROVIDER }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_API_URL: ${{ vars.BREVO_API_URL }}
+
+          SMS_CHANNEL_PROVIDER: ${{ vars.SMS_CHANNEL_PROVIDER }}
+          MOBIZON_API_KEY: ${{ secrets.MOBIZON_API_KEY }}
+          MOBIZON_API_URL: ${{ vars.MOBIZON_API_URL }}
+
+          VOICEMAIL_CHANNEL_PROVIDER: ${{ vars.VOICEMAIL_CHANNEL_PROVIDER }}
+          NVOIP_SID: ${{ secrets.NVOIP_SID }}
+          NVOIP_USER_TOKEN: ${{ secrets.NVOIP_USER_TOKEN }}
+          NVOIP_API_URL: ${{ vars.NVOIP_API_URL }}
         run: |-
           echo "DATABASE_PROVIDER=$DATABASE_PROVIDER" > .env-for-app-yaml
 
@@ -40,6 +56,22 @@ jobs:
           echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
 
           echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
+
+          echo "PUBSUB_PROVIDER=$PUBSUB_PROVIDER" >> .env-for-app-yaml
+          echo "GOOGLE_PUBSUB_TOPIC_NAME=$GOOGLE_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
+
+          echo "EMAIL_CHANNEL_PROVIDER=$EMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
+          echo "BREVO_API_KEY=$BREVO_API_KEY" >> .env-for-app-yaml
+          echo "BREVO_API_URL=$BREVO_API_URL" >> .env-for-app-yaml
+
+          echo "SMS_CHANNEL_PROVIDER=$SMS_CHANNEL_PROVIDER" >> .env-for-app-yaml
+          echo "MOBIZON_API_KEY=$MOBIZON_API_KEY" >> .env-for-app-yaml
+          echo "MOBIZON_API_URL=$MOBIZON_API_URL" >> .env-for-app-yaml
+
+          echo "VOICEMAIL_CHANNEL_PROVIDER=$VOICEMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
+          echo "NVOIP_SID=$NVOIP_SID" >> .env-for-app-yaml
+          echo "NVOIP_USER_TOKEN=$NVOIP_USER_TOKEN" >> .env-for-app-yaml
+          echo "NVOIP_API_URL=$NVOIP_API_URL" >> .env-for-app-yaml
   
       - name: Prepare app.yaml
         uses: mshick/fast-envsubst@v1
