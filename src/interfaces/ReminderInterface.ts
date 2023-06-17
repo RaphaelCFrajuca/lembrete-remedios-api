@@ -33,3 +33,9 @@ export interface ReminderBase {
     daysOfWeek: string[];
     hour: string;
 }
+export interface ReminderToSchedule {
+    email: string;
+    name: string;
+    phone: string;
+    reminders: ReminderMedication[];
+}

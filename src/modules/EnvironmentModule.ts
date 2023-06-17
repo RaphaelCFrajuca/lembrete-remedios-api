@@ -40,6 +40,34 @@ import { ConfigModule } from "@nestjs/config";
             provide: "JWT_PUBLIC_CERT",
             useValue: process.env.JWT_PUBLIC_CERT,
         },
+        {
+            provide: "EMAIL_CHANNEL_PROVIDER",
+            useValue: process.env.EMAIL_CHANNEL_PROVIDER,
+        },
+        {
+            provide: "SMS_CHANNEL_PROVIDER",
+            useValue: process.env.SMS_CHANNEL_PROVIDER,
+        },
+        {
+            provide: "VOICEMAIL_CHANNEL_PROVIDER",
+            useValue: process.env.VOICEMAIL_CHANNEL_PROVIDER,
+        },
+        {
+            provide: "BREVO_API_KEY",
+            useValue: process.env.BREVO_API_KEY,
+        },
+        {
+            provide: "MOBIZON_API_KEY",
+            useValue: process.env.MOBIZON_API_KEY,
+        },
+        {
+            provide: "NVOIP_SID",
+            useValue: process.env.NVOIP_SID,
+        },
+        {
+            provide: "NVOIP_USER_TOKEN",
+            useValue: process.env.NVOIP_USER_TOKEN,
+        },
     ],
     exports: [
         "MONGODB_URI",
@@ -51,6 +79,13 @@ import { ConfigModule } from "@nestjs/config";
         "MYSQL_PASSWORD",
         "MYSQL_DATABASE_NAME",
         "JWT_PUBLIC_CERT",
+        "EMAIL_CHANNEL_PROVIDER",
+        "SMS_CHANNEL_PROVIDER",
+        "VOICEMAIL_CHANNEL_PROVIDER",
+        "BREVO_API_KEY",
+        "MOBIZON_API_KEY",
+        "NVOIP_SID",
+        "NVOIP_USER_TOKEN",
     ],
 })
 export class EnvironmentModule {}

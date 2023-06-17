@@ -1,7 +1,23 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString, IsUrl } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from "class-validator";
 import { User } from "src/interfaces/UserInterface";
-
+import { ChannelProviderType } from "src/types/ChannelProviderType";
 export class UserDto implements User {
+    @IsNotEmpty()
+    @IsString()
+    reminderChannel: ChannelProviderType;
+
+    @IsNotEmpty()
+    @IsString()
+    given_name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    family_name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    locale: string;
+
     @IsNotEmpty()
     @IsString()
     nickname: string;
@@ -17,6 +33,10 @@ export class UserDto implements User {
     @IsNotEmpty()
     @IsEmail()
     email: string;
+
+    @IsNotEmpty()
+    @IsPhoneNumber()
+    phone: string;
 
     @IsNotEmpty()
     @IsBoolean()

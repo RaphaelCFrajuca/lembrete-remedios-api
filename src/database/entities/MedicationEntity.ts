@@ -1,7 +1,12 @@
+import { Medication } from "src/interfaces/MedicationInterface";
 import { Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity("medications")
-export class MedicationEntity {
+export class MedicationEntity implements Medication {
+    value: string;
+
+    label: string;
+
     @Column()
     principioAtivo: string;
 

@@ -19,10 +19,22 @@ export class MySQLService implements Database {
         @Inject("MYSQL_DATABASE_NAME") private readonly databaseName: string,
     ) {}
 
+    async getAllReminders(): Promise<Reminder[]> {
+        const mysqlManager = await this.getDataSource();
+        const users = (await mysqlManager.getRepository(ReminderEntityMySQL).find()).map(user => {
+            return {
+                email: user.email,
+                reminders: JSON.parse(user.reminders),
+            };
+        });
+        return users;
+    }
+
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mysqlManager = await this.getDataSource();
         const reminders = await mysqlManager.getRepository(ReminderEntityMySQL).findOneBy({ email });
-        return JSON.parse(reminders?.reminders) ?? null;
+        console.log(reminders?.reminders);
+        return reminders?.reminders ? JSON.parse(reminders?.reminders) : null;
     }
 
     async newReminders(reminders: ReminderUser[], email: string): Promise<void> {

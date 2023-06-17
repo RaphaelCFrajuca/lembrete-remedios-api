@@ -1,8 +1,10 @@
-import { ReminderUser } from "src/interfaces/ReminderInterface";
+import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
 import { Column, Entity, ObjectId, ObjectIdColumn, PrimaryColumn } from "typeorm";
 
 @Entity("reminders")
-export class ReminderEntity {
+export class ReminderEntity implements Reminder {
+    reminders: string | ReminderUser[];
+
     @PrimaryColumn({ unique: true })
     email: string;
 }

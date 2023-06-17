@@ -1,9 +1,12 @@
 import { HttpStatus, Inject } from "@nestjs/common";
 import { DatabaseProvider } from "src/database/DatabaseProvider";
-import { ReminderBase, ReminderList, ReminderMedication, ReminderUser } from "src/interfaces/ReminderInterface";
+import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "src/interfaces/ReminderInterface";
+import { Logger } from "src/utils/Logger";
+import { UserService } from "./UserService";
+import { ChannelService } from "src/interfaces/ChannelInterface";
 
 export class ReminderService {
-    constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider) {}
+    constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider, @Inject("CHANNEL_SERVICE") private readonly channelService: ChannelService) {}
 
     updateRemindersObject(formData: ReminderBase, actualData: ReminderUser[]): ReminderUser[] {
         const existingDataIndex = actualData.findIndex(data => data.name === formData.fullName);
@@ -144,6 +147,30 @@ export class ReminderService {
         };
     }
 
+    getDateHourUTCMinus3() {
+        const now = new Date();
+
+        const formatterDate = new Intl.DateTimeFormat("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            weekday: "long",
+        });
+
+        const formatterHour = new Intl.DateTimeFormat("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            hour: "numeric",
+            minute: "numeric",
+        });
+
+        let dayWeek = formatterDate.format(now);
+        dayWeek = dayWeek.charAt(0).toUpperCase() + dayWeek.slice(1);
+        const actualHour = formatterHour.format(now);
+
+        return {
+            dayWeek,
+            actualHour,
+        };
+    }
+
     async get(email: string) {
         return await this.databaseService.getReminders(email);
     }
@@ -189,6 +216,47 @@ export class ReminderService {
             status: "success",
             code: HttpStatus.OK,
             message: `Reminders of ${email} deleted`,
+        };
+    }
+
+    async schedule() {
+        const { dayWeek, actualHour } = { actualHour: "03:00", dayWeek: "Sexta-feira" };
+        //const { dayWeek, actualHour } = this.getDateHourUTCMinus3();
+        const remindersToSchedule = [];
+        (await this.databaseService.getAllReminders()).map((item: Reminder) => {
+            return (item.reminders as ReminderUser[]).map((reminderUser: ReminderUser) => {
+                return reminderUser.reminderList.map((reminderList: ReminderList) => {
+                    if (dayWeek === reminderList.dayOfWeek) {
+                        const reminderMedication: ReminderMedication[] = [];
+                        return reminderList.reminders.map((reminder: ReminderMedication) => {
+                            if (reminder.hour === actualHour) {
+                                reminderMedication.push(reminder);
+                                remindersToSchedule.push({
+                                    email: item.email,
+
+                                    name: reminderUser.name,
+                                    reminders: reminderMedication,
+                                });
+                                return {
+                                    email: item.email,
+                                    name: reminderUser.name,
+                                    reminders: reminderMedication,
+                                };
+                            }
+                        })[0] as ReminderToSchedule;
+                    }
+                })[0];
+            })[0];
+        });
+        for (const reminder of remindersToSchedule) {
+            reminder.phone = (await this.databaseService.findUserByEmail(reminder.email)).phone;
+        }
+        Logger.log("Scheduling reminders for Pub/Sub Provider", { remindersToSchedule, this: this });
+        //this.channelService.email.send(remindersToSchedule[0]);
+        return {
+            status: "success",
+            code: HttpStatus.CREATED,
+            message: `Reminders scheduled`,
         };
     }
 }

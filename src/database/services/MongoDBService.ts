@@ -7,12 +7,17 @@ import { UserEntity, UserEntityMongo } from "../entities/UserEntity";
 import { User } from "src/interfaces/UserInterface";
 import { CustomException } from "src/utils/Errors/CustomException";
 import { Logger } from "src/utils/Logger";
-import { Reminder } from "src/interfaces/ReminderInterface";
 import { ReminderEntityMongo } from "../entities/ReminderEntity";
-import { ReminderUser } from "src/interfaces/ReminderInterface";
+import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
 
 export class MongoDBService implements Database {
     constructor(@Inject("MONGODB_URI") private readonly mongoDbUri: string, @Inject("MONGODB_DATABASE_NAME") private readonly mongoDbDatabaseName: string) {}
+
+    async getAllReminders(): Promise<Reminder[]> {
+        const mongoManager = await this.getDataSource();
+        const users = await mongoManager.getMongoRepository(ReminderEntityMongo).find();
+        return users;
+    }
 
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mongoManager = await this.getDataSource();

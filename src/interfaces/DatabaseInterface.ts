@@ -9,6 +9,7 @@ export interface Database {
     deleteUser(email: string): Promise<void>;
     updateUser(user: User): Promise<void>;
     getReminders(email: string): Promise<ReminderUser[]>;
+    getAllReminders(): Promise<Reminder[]>;
     newReminders(reminders: ReminderUser[], email: string): Promise<void>;
     updateReminders(reminders: ReminderUser[], email: string): Promise<void>;
     deleteReminders(reminders: ReminderUser[], email: string): Promise<void>;

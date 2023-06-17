@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
 import { UserGuard } from "src/guards/UserGuard";
 import { ReminderService } from "src/services/ReminderService";
 import { FindReminderDto, ReminderDto } from "../dto/ReminderDto";
 import { CustomException } from "src/utils/Errors/CustomException";
-import { FindUserDto } from "../dto/FindUserDto";
 import { ReminderBaseDto } from "../dto/ReminderBaseDto";
 
 @Controller("reminder")
@@ -28,6 +27,13 @@ export class ReminderController {
     @UseGuards(UserGuard)
     async new(@Body() body: ReminderBaseDto, @Res() res, @Request() request) {
         const serviceResponse = await this.reminderService.new(body, request.user?.email);
+        res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
+        return;
+    }
+
+    @Post("schedule")
+    async schedule(@Res() res) {
+        const serviceResponse = await this.reminderService.schedule();
         res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         return;
     }

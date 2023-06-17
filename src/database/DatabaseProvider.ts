@@ -6,6 +6,10 @@ import { User } from "src/interfaces/UserInterface";
 export class DatabaseProvider implements Database {
     constructor(private readonly provider: Database) {}
 
+    async getAllReminders(): Promise<Reminder[]> {
+        return await this.provider.getAllReminders();
+    }
+
     async getReminders(email: string): Promise<ReminderUser[]> {
         return await this.provider.getReminders(email);
     }

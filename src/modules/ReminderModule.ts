@@ -5,9 +5,10 @@ import { ReminderService } from "src/services/ReminderService";
 import { UserGuard } from "src/guards/UserGuard";
 import { UserModule } from "./UserModule";
 import { ReminderController } from "src/controllers/reminder/ReminderController";
+import { ChannelModule } from "./ChannelModule";
 
 @Module({
-    imports: [EnvironmentModule, DatabaseModule, UserModule],
+    imports: [EnvironmentModule, DatabaseModule, UserModule, ChannelModule],
     controllers: [ReminderController],
     providers: [ReminderService, UserGuard],
 })
