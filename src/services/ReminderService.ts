@@ -3,9 +3,15 @@ import { DatabaseProvider } from "src/database/DatabaseProvider";
 import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "src/interfaces/ReminderInterface";
 import { Logger } from "src/utils/Logger";
 import { ChannelService, MessageData } from "src/interfaces/ChannelInterface";
+import { PubSubProvider } from "src/pubsub/PubSubProvider";
+import { ChannelProviderType } from "src/types/ChannelProviderType";
 
 export class ReminderService {
-    constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider, @Inject("CHANNEL_SERVICE") private readonly channelService: ChannelService) {}
+    constructor(
+        @Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider,
+        @Inject("CHANNEL_SERVICE") private readonly channelService: ChannelService,
+        @Inject("PUBSUB_SERVICE") private readonly pubSubService: PubSubProvider,
+    ) {}
 
     updateRemindersObject(formData: ReminderBase, actualData: ReminderUser[]): ReminderUser[] {
         const existingDataIndex = actualData.findIndex(data => data.name === formData.fullName);
@@ -219,8 +225,7 @@ export class ReminderService {
     }
 
     async schedule() {
-        const { dayWeek, actualHour } = { actualHour: "03:00", dayWeek: "Sexta-feira" };
-        //const { dayWeek, actualHour } = this.getDateHourUTCMinus3();
+        const { dayWeek, actualHour } = this.getDateHourUTCMinus3();
         const remindersToSchedule = [];
         (await this.databaseService.getAllReminders()).map((item: Reminder) => {
             return (item.reminders as ReminderUser[]).map((reminderUser: ReminderUser) => {
@@ -246,8 +251,19 @@ export class ReminderService {
                 })[0];
             })[0];
         });
+
+        if (remindersToSchedule.length === 0) {
+            return {
+                status: "success",
+                code: HttpStatus.OK,
+                message: `No reminders to schedule`,
+            };
+        }
+
         for (const reminder of remindersToSchedule) {
-            reminder.phone = (await this.databaseService.findUserByEmail(reminder.email)).phone;
+            const user = await this.databaseService.findUserByEmail(reminder.email);
+            reminder.phone = user.phone;
+            reminder.channel = user.reminderChannel;
         }
         Logger.log("Scheduling reminders for Pub/Sub Provider", { remindersToSchedule, this: this });
 
@@ -258,6 +274,7 @@ export class ReminderService {
                         name: item.name,
                         phone: item.phone,
                         email: item.email,
+                        channel: item.channel,
                         reminder: {
                             medication: reminder.medication,
                             hour: reminder.hour,
@@ -265,18 +282,22 @@ export class ReminderService {
                     };
                 })[0];
             });
-            await this.channelService.voicemail.send(messagesToPublish[0]);
+
+            for (const message of messagesToPublish) {
+                await this.pubSubService.publish(message, message.channel.toLowerCase());
+            }
+
             return {
                 status: "success",
                 code: HttpStatus.CREATED,
                 message: `Reminders scheduled`,
             };
         } catch (error) {
-            Logger.error(error.response, { remindersToSchedule, this: this });
+            Logger.error(error.message, { remindersToSchedule, this: this });
             return {
                 status: "error",
-                code: error.status,
-                message: error.response,
+                code: error.status || 500,
+                message: error.response || "Internal Server Error",
             };
         }
     }

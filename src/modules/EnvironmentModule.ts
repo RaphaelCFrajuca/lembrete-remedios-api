@@ -41,6 +41,14 @@ import { ConfigModule } from "@nestjs/config";
             useValue: process.env.JWT_PUBLIC_CERT,
         },
         {
+            provide: "PUBSUB_PROVIDER",
+            useValue: process.env.PUBSUB_PROVIDER,
+        },
+        {
+            provide: "GOOGLE_PUBSUB_TOPIC_NAME",
+            useValue: process.env.GOOGLE_PUBSUB_TOPIC_NAME,
+        },
+        {
             provide: "EMAIL_CHANNEL_PROVIDER",
             useValue: process.env.EMAIL_CHANNEL_PROVIDER,
         },
@@ -91,6 +99,8 @@ import { ConfigModule } from "@nestjs/config";
         "MYSQL_PASSWORD",
         "MYSQL_DATABASE_NAME",
         "JWT_PUBLIC_CERT",
+        "PUBSUB_PROVIDER",
+        "GOOGLE_PUBSUB_TOPIC_NAME",
         "EMAIL_CHANNEL_PROVIDER",
         "SMS_CHANNEL_PROVIDER",
         "VOICEMAIL_CHANNEL_PROVIDER",

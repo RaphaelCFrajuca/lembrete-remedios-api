@@ -1,7 +1,9 @@
 import { ChannelProvider } from "./channels/ChannelProvider";
 import { DatabaseProvider } from "./database/DatabaseProvider";
+import { PubSubProvider } from "./pubsub/PubSubProvider";
 import { ChannelProviderMap, ChannelProviderType, EmailChannelProviderType, SmsChannelProviderType, VoiceMailChannelProviderType } from "./types/ChannelProviderType";
 import { DatabaseProviderMap, DatabaseProviderType } from "./types/DatabaseProviderType";
+import { PubSubProviderMap, PubSubProviderType } from "./types/PubSubProviderType";
 import { Logger } from "./utils/Logger";
 
 export function databaseFactory(
@@ -20,6 +22,19 @@ export function databaseFactory(
     }
     const provider = DatabaseProviderMap[databaseProvider];
     return new DatabaseProvider(provider.factory([mongoDbUri, mongoDbDatabaseName, mysqlHost, mysqlPort, mysqlUserName, mysqlPassword, mysqlDatabaseName]));
+}
+
+export function pubSubFactory(pubSubProvider: string, topicName: string): PubSubProvider {
+    if (!pubSubProvider) {
+        Logger.warn(`No Pub/Sub provider setted, using default ${PubSubProviderType.DEFAULT} provider`, { pubSubProvider, this: this });
+        pubSubProvider = PubSubProviderType.DEFAULT;
+    }
+
+    if (!topicName) {
+        throw new Error("Pub/Sub topic name not provided");
+    }
+    const provider = PubSubProviderMap[pubSubProvider];
+    return new PubSubProvider(provider.factory([topicName]));
 }
 
 export function channelFactory(

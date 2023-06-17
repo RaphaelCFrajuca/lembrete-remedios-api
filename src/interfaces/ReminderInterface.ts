@@ -1,3 +1,5 @@
+import { ChannelProviderType } from "src/types/ChannelProviderType";
+
 export interface ReminderMedication {
     uniqueId?: number;
     level?: number;
@@ -37,5 +39,6 @@ export interface ReminderToSchedule {
     email: string;
     name: string;
     phone: string;
+    channel: ChannelProviderType;
     reminders: ReminderMedication[];
 }
