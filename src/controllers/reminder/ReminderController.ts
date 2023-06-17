@@ -4,6 +4,8 @@ import { ReminderService } from "src/services/ReminderService";
 import { FindReminderDto, ReminderDto } from "../dto/ReminderDto";
 import { CustomException } from "src/utils/Errors/CustomException";
 import { ReminderBaseDto } from "../dto/ReminderBaseDto";
+import { PubSubRequestDto } from "../dto/PubSubRequestDto";
+import { MessageData } from "src/interfaces/ChannelInterface";
 
 @Controller("reminder")
 export class ReminderController {
@@ -34,6 +36,15 @@ export class ReminderController {
     @Post("schedule")
     async schedule(@Res() res) {
         const serviceResponse = await this.reminderService.schedule();
+        res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
+        return;
+    }
+
+    @Post("send")
+    async send(@Body() body: PubSubRequestDto, @Res() res) {
+        const channel = body.message.attributes.channel;
+        const messageData: MessageData = JSON.parse(Buffer.from(body.message.data, "base64").toString("utf-8")).messageData;
+        const serviceResponse = await this.reminderService.send(channel, messageData);
         res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         return;
     }

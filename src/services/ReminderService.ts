@@ -5,6 +5,7 @@ import { Logger } from "src/utils/Logger";
 import { ChannelService, MessageData } from "src/interfaces/ChannelInterface";
 import { PubSubProvider } from "src/pubsub/PubSubProvider";
 import { ChannelProviderType } from "src/types/ChannelProviderType";
+import { CustomException } from "src/utils/Errors/CustomException";
 
 export class ReminderService {
     constructor(
@@ -294,6 +295,39 @@ export class ReminderService {
             };
         } catch (error) {
             Logger.error(error.message, { remindersToSchedule, this: this });
+            return {
+                status: "error",
+                code: error.status || 500,
+                message: error.response || "Internal Server Error",
+            };
+        }
+    }
+
+    async send(channel: string, messageData: MessageData) {
+        try {
+            switch (channel.toUpperCase()) {
+                case ChannelProviderType.EMAIL:
+                    Logger.log("Sending message to email provider", { channel, messageData, this: this });
+                    await this.channelService.email.send(messageData);
+                    break;
+                case ChannelProviderType.SMS:
+                    Logger.log("Sending message to sms provider", { channel, messageData, this: this });
+                    await this.channelService.sms.send(messageData);
+                    break;
+                case ChannelProviderType.VOICEMAIL:
+                    Logger.log("Sending message to voicemail provider", { channel, messageData, this: this });
+                    await this.channelService.voicemail.send(messageData);
+                    break;
+                default:
+                    throw new CustomException("Invalid channel", HttpStatus.NOT_ACCEPTABLE);
+            }
+            return {
+                status: "success",
+                code: HttpStatus.OK,
+                message: `Message Dispatched`,
+            };
+        } catch (error) {
+            Logger.error(error.message, { channel, messageData, this: this });
             return {
                 status: "error",
                 code: error.status || 500,
