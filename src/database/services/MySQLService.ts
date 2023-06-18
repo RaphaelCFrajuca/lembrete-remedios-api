@@ -72,9 +72,9 @@ export class MySQLService implements Database {
     }
 
     async updateUser(user: User): Promise<void> {
-        const { nickname, name, picture, email, email_verified } = user;
+        const { nickname, name, picture, email, email_verified, phone, reminderChannel } = user;
         const mysqlManager = await this.getDataSource();
-        await mysqlManager.getRepository(UserEntity).update({ email: user.email }, { nickname, name, picture, email, email_verified });
+        await mysqlManager.getRepository(UserEntity).update({ email: user.email }, { nickname, name, picture, email, email_verified, phone, reminderChannel });
         Logger.log(`User ${user.email} updated`, user);
     }
 
