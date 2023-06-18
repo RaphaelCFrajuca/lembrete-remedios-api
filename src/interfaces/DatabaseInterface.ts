@@ -13,4 +13,5 @@ export interface Database {
     newReminders(reminders: ReminderUser[], email: string): Promise<void>;
     updateReminders(reminders: ReminderUser[], email: string): Promise<void>;
     deleteReminders(reminders: ReminderUser[], email: string): Promise<void>;
+    getNames(email: string): Promise<string[]>;
 }

@@ -13,6 +13,15 @@ import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
 export class MongoDBService implements Database {
     constructor(@Inject("MONGODB_URI") private readonly mongoDbUri: string, @Inject("MONGODB_DATABASE_NAME") private readonly mongoDbDatabaseName: string) {}
 
+    async getNames(email: string): Promise<string[]> {
+        const names = [];
+        const reminders = await this.getReminders(email);
+        reminders.map(item => {
+            names.push(item.name);
+        });
+        return names;
+    }
+
     async getAllReminders(): Promise<Reminder[]> {
         const mongoManager = await this.getDataSource();
         const users = await mongoManager.getMongoRepository(ReminderEntityMongo).find();

@@ -181,6 +181,10 @@ export class ReminderService {
         return await this.databaseService.getReminders(email);
     }
 
+    async getNames(email: string) {
+        return await this.databaseService.getNames(email);
+    }
+
     async new(body: ReminderBase, email: string) {
         const actualReminders = await this.databaseService.getReminders(email);
         if (actualReminders === null) {
