@@ -16,12 +16,14 @@ export class MongoDBService implements Database {
     async getAllReminders(): Promise<Reminder[]> {
         const mongoManager = await this.getDataSource();
         const users = await mongoManager.getMongoRepository(ReminderEntityMongo).find();
+        mongoManager.destroy();
         return users;
     }
 
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mongoManager = await this.getDataSource();
         const reminders = await mongoManager.getMongoRepository(ReminderEntityMongo).findOneBy({ email });
+        mongoManager.destroy();
         return reminders?.reminders ?? null;
     }
 
@@ -29,18 +31,21 @@ export class MongoDBService implements Database {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(ReminderEntityMongo).save({ reminders: reminders as ReminderUser[], email });
         Logger.log(`Reminders of ${email} saved`, reminders);
+        mongoManager.destroy();
     }
 
     async updateReminders(reminders: ReminderUser[], email: string): Promise<void> {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(ReminderEntityMongo).update({ email }, { reminders: reminders as ReminderUser[], email });
         Logger.log(`Reminders of ${email} updated`, reminders);
+        mongoManager.destroy();
     }
 
     async deleteReminders(reminders: ReminderUser[], email: string): Promise<void> {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(ReminderEntityMongo).delete({ email });
         Logger.log(`Reminders of ${email} deleted`, reminders);
+        mongoManager.destroy();
     }
 
     async deleteUser(email: string): Promise<void> {
@@ -51,12 +56,14 @@ export class MongoDBService implements Database {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(UserEntityMongo).remove(user);
         Logger.log(`User ${user.email} deleted`, user);
+        mongoManager.destroy();
     }
 
     async registerUser(user: User): Promise<void> {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(UserEntityMongo).save(user);
         Logger.log(`User ${user.email} registered`, user);
+        mongoManager.destroy();
     }
 
     async updateUser(user: User): Promise<void> {
@@ -64,6 +71,7 @@ export class MongoDBService implements Database {
         const mongoManager = await this.getDataSource();
         await mongoManager.getMongoRepository(UserEntityMongo).update({ email: user.email }, { nickname, name, picture, email, email_verified, phone, reminderChannel });
         Logger.log(`User ${user.email} updated`, user);
+        mongoManager.destroy();
     }
 
     async findUserByEmail(email: string): Promise<User | null> {
@@ -74,6 +82,7 @@ export class MongoDBService implements Database {
     async getMedicationsList(): Promise<Medication[]> {
         const mongoManager = await this.getDataSource();
         const medicationList = await mongoManager.getMongoRepository(MedicationEntity).find();
+        mongoManager.destroy();
         return medicationList
             .map(medication => ({ value: medication.nome, label: medication.nome }))
             .filter((value, index, self) => {
