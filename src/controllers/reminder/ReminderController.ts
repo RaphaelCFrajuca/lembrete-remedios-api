@@ -27,11 +27,8 @@ export class ReminderController {
 
     @Get("name")
     @UseGuards(UserGuard)
-    async getNames(@Query() findReminderDto: FindReminderDto, @Res() res, @Request() request) {
-        if (findReminderDto.email !== request.user?.email) {
-            throw new CustomException(`User ${request.user?.email} not authorized to get ${findReminderDto.email} names`, HttpStatus.FORBIDDEN);
-        }
-        const reminders = await this.reminderService.getNames(findReminderDto.email);
+    async getNames(@Res() res, @Request() request) {
+        const reminders = await this.reminderService.getNames(request.user?.email);
         if (reminders) {
             res.status(HttpStatus.OK).json(reminders);
         } else {
