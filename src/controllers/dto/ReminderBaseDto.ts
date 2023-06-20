@@ -1,4 +1,4 @@
-import { ArrayMinSize, ArrayNotEmpty, IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { ArrayMinSize, ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from "class-validator";
 import { ReminderBase } from "src/interfaces/ReminderInterface";
 
 export class ReminderBaseDto implements ReminderBase {
