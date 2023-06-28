@@ -3,7 +3,7 @@ import { DatabaseProvider } from "./database/DatabaseProvider";
 import { PubSubProvider } from "./pubsub/PubSubProvider";
 import { ChannelProviderMap, ChannelProviderType, EmailChannelProviderType, SmsChannelProviderType, VoiceMailChannelProviderType } from "./types/ChannelProviderType";
 import { DatabaseProviderMap, DatabaseProviderType } from "./types/DatabaseProviderType";
-import { PubSubProviderMap, PubSubProviderType } from "./types/PubSubProviderType";
+import { PubSubCredentials, PubSubProviderMap, PubSubProviderType } from "./types/PubSubProviderType";
 import { Logger } from "./utils/Logger";
 
 export function databaseFactory(
@@ -24,17 +24,28 @@ export function databaseFactory(
     return new DatabaseProvider(provider.factory([mongoDbUri, mongoDbDatabaseName, mysqlHost, mysqlPort, mysqlUserName, mysqlPassword, mysqlDatabaseName]));
 }
 
-export function pubSubFactory(pubSubProvider: string, topicName: string): PubSubProvider {
+export function pubSubFactory(pubSubProvider: string, googleTopicName: string, amazonTopicName: string, amazonCredentials: PubSubCredentials): PubSubProvider {
     if (!pubSubProvider) {
         Logger.warn(`No Pub/Sub provider setted, using default ${PubSubProviderType.DEFAULT} provider`, { pubSubProvider, this: this });
         pubSubProvider = PubSubProviderType.DEFAULT;
     }
 
-    if (!topicName) {
+    if (!googleTopicName && !amazonTopicName) {
         throw new Error("Pub/Sub topic name not provided");
     }
+    let topicName;
+    let credentials: PubSubCredentials;
+    if (pubSubProvider === PubSubProviderType.GOOGLE) {
+        topicName = googleTopicName;
+        credentials = { google: undefined } as PubSubCredentials;
+    } else if (pubSubProvider === PubSubProviderType.AMAZON) {
+        topicName = amazonTopicName;
+        credentials = {
+            amazon: amazonCredentials,
+        } as PubSubCredentials;
+    }
     const provider = PubSubProviderMap[pubSubProvider];
-    return new PubSubProvider(provider.factory([topicName]));
+    return new PubSubProvider(provider.factory([topicName, credentials]));
 }
 
 export function channelFactory(

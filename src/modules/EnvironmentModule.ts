@@ -49,6 +49,18 @@ import { ConfigModule } from "@nestjs/config";
             useValue: process.env.GOOGLE_PUBSUB_TOPIC_NAME,
         },
         {
+            provide: "AMAZON_PUBSUB_TOPIC_NAME",
+            useValue: process.env.AMAZON_PUBSUB_TOPIC_NAME,
+        },
+        {
+            provide: "AMAZON_CREDENTIALS",
+            useValue: {
+                region: process.env.AMAZON_REGION,
+                accessKeyId: process.env.AMAZON_PUBSUB_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AMAZON_PUBSUB_SECRET_ACCESS_KEY,
+            },
+        },
+        {
             provide: "EMAIL_CHANNEL_PROVIDER",
             useValue: process.env.EMAIL_CHANNEL_PROVIDER,
         },
@@ -101,6 +113,8 @@ import { ConfigModule } from "@nestjs/config";
         "JWT_PUBLIC_CERT",
         "PUBSUB_PROVIDER",
         "GOOGLE_PUBSUB_TOPIC_NAME",
+        "AMAZON_PUBSUB_TOPIC_NAME",
+        "AMAZON_CREDENTIALS",
         "EMAIL_CHANNEL_PROVIDER",
         "SMS_CHANNEL_PROVIDER",
         "VOICEMAIL_CHANNEL_PROVIDER",

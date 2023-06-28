@@ -29,7 +29,13 @@ jobs:
           JWT_PUBLIC_CERT: ${{ secrets.JWT_PUBLIC_CERT }}
 
           PUBSUB_PROVIDER: ${{ vars.PUBSUB_PROVIDER }}
+
           GOOGLE_PUBSUB_TOPIC_NAME: ${{ vars.GOOGLE_PUBSUB_TOPIC_NAME }}
+
+          AMAZON_PUBSUB_TOPIC_NAME: ${{ vars.AMAZON_PUBSUB_TOPIC_NAME }}
+          AMAZON_PUBSUB_ACCESS_KEY_ID: ${{ secrets.AMAZON_PUBSUB_ACCESS_KEY_ID }}
+          AMAZON_PUBSUB_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_PUBSUB_SECRET_ACCESS_KEY }}
+          AMAZON_REGION: ${{ vars.AMAZON_REGION }}
 
           EMAIL_CHANNEL_PROVIDER: ${{ vars.EMAIL_CHANNEL_PROVIDER }}
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
@@ -58,7 +64,13 @@ jobs:
           echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
 
           echo "PUBSUB_PROVIDER=$PUBSUB_PROVIDER" >> .env-for-app-yaml
+
           echo "GOOGLE_PUBSUB_TOPIC_NAME=$GOOGLE_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
+
+          echo "AMAZON_PUBSUB_TOPIC_NAME=$AMAZON_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
+          echo "AMAZON_PUBSUB_ACCESS_KEY_ID=$AMAZON_PUBSUB_ACCESS_KEY_ID" >> .env-for-app-yaml
+          echo "AMAZON_PUBSUB_SECRET_ACCESS_KEY=$AMAZON_PUBSUB_SECRET_ACCESS_KEY" >> .env-for-app-yaml
+          echo "AMAZON_REGION=$AMAZON_REGION" >> .env-for-app-yaml
 
           echo "EMAIL_CHANNEL_PROVIDER=$EMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
           echo "BREVO_API_KEY=$BREVO_API_KEY" >> .env-for-app-yaml

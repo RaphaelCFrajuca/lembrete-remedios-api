@@ -1,9 +1,48 @@
-import { IsNotEmpty, IsNotEmptyObject, IsObject, IsString } from "class-validator";
+import { IsObject, IsString } from "class-validator";
 
-export class PubSubRequestDto {
-    @IsNotEmptyObject()
+class SNSMessage {
+    @IsString()
+    Type?: string;
+
+    @IsString()
+    MessageId?: string;
+
+    @IsString()
+    Token?: string;
+
+    @IsString()
+    TopicArn?: string;
+
+    @IsString()
+    Message?: string;
+
+    @IsString()
+    SubscribeURL?: string;
+
+    @IsString()
+    Timestamp?: string;
+
+    @IsString()
+    SignatureVersion?: string;
+
+    @IsString()
+    Signature?: string;
+
+    @IsString()
+    SigningCertURL?: string;
+
     @IsObject()
-    message: {
+    MessageAttributes?: {
+        channel: {
+            Type: string;
+            Value: string;
+        };
+    };
+}
+
+class PubSubMessage {
+    @IsObject()
+    message?: {
         attributes: {
             channel: string;
         };
@@ -13,7 +52,8 @@ export class PubSubRequestDto {
         publishTime: string;
         publish_time: string;
     };
-    @IsNotEmpty()
+
     @IsString()
-    subscription: string;
+    subscription?: string;
 }
+export interface PubSubRequestDto extends PubSubMessage, SNSMessage {}

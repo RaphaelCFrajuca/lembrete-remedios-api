@@ -10,7 +10,7 @@ import { pubSubFactory } from "src/ModuleFactorys";
         {
             provide: "PUBSUB_SERVICE",
             useFactory: pubSubFactory,
-            inject: ["PUBSUB_PROVIDER", "GOOGLE_PUBSUB_TOPIC_NAME"],
+            inject: ["PUBSUB_PROVIDER", "GOOGLE_PUBSUB_TOPIC_NAME", "AMAZON_PUBSUB_TOPIC_NAME", "AMAZON_CREDENTIALS"],
         },
     ],
     exports: ["PUBSUB_SERVICE"],
