@@ -55,6 +55,7 @@ export class ReminderController {
 
     @Post("send")
     async send(@Body() body: PubSubRequestDto, @Res() res, @Request() request) {
+        Logger.log("Pub/Sub Request", { body, headers: request.headers });
         if (request.headers["user-agent"] === "CloudPubSub-Google") {
             const channel = body.message.attributes.channel;
             const messageData: MessageData = JSON.parse(Buffer.from(body.message.data, "base64").toString("utf-8")).messageData;
