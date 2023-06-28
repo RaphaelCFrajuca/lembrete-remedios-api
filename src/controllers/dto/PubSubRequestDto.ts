@@ -1,6 +1,6 @@
 import { IsObject, IsString } from "class-validator";
 
-class SNSMessage {
+class AmazonMessage {
     @IsString()
     Type?: string;
 
@@ -40,7 +40,7 @@ class SNSMessage {
     };
 }
 
-class PubSubMessage {
+class GoogleMessage {
     @IsObject()
     message?: {
         attributes: {
@@ -56,4 +56,4 @@ class PubSubMessage {
     @IsString()
     subscription?: string;
 }
-export interface PubSubRequestDto extends PubSubMessage, SNSMessage {}
+export interface PubSubRequestDto extends GoogleMessage, AmazonMessage {}
