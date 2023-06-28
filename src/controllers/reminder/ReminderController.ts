@@ -7,6 +7,7 @@ import { ReminderBaseDto } from "../dto/ReminderBaseDto";
 import { PubSubRequestDto } from "../dto/PubSubRequestDto";
 import { MessageData } from "src/interfaces/ChannelInterface";
 import axios from "axios";
+import { Logger } from "src/utils/Logger";
 
 @Controller("reminder")
 export class ReminderController {
@@ -61,8 +62,10 @@ export class ReminderController {
             res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         } else if (request.headers["user-agent"] === "Amazon Simple Notification Service Agent") {
             if (body.Type === "SubscriptionConfirmation") {
-                axios.get(body.SubscribeURL);
+                Logger.log("Subscription Confirmed", { body });
+                await axios.get(body.SubscribeURL);
                 res.status(HttpStatus.OK).json({ status: "success", message: "Subscription Confirmed" });
+                return;
             }
             const channel = body.MessageAttributes.channel.Value;
             const messageData: MessageData = JSON.parse(body.Message);
