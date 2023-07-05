@@ -1,5 +1,5 @@
 import { IsArray, IsEmail, IsNotEmpty, IsNotEmptyObject, IsNumber, IsString, ValidateNested } from "class-validator";
-import { ReminderList, ReminderUser } from "src/interfaces/ReminderInterface";
+import { ReminderList, ReminderUser } from "interfaces/ReminderInterface";
 
 export class ReminderDto implements ReminderUser {
     @IsNotEmpty()

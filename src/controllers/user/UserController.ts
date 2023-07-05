@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
-import { UserService } from "src/services/UserService";
+import { UserService } from "services/UserService";
 import { FindUserDto } from "../dto/FindUserDto";
-import { UserGuard } from "src/guards/UserGuard";
+import { UserGuard } from "guards/UserGuard";
 import { UserDto } from "../dto/UserDto";
 import { Response } from "express";
-import { CustomException } from "src/utils/Errors/CustomException";
+import { CustomException } from "utils/Errors/CustomException";
 
 @Controller("user")
 export class UserController {
@@ -34,8 +34,10 @@ export class UserController {
 
     @Post("new")
     @UseGuards(UserGuard)
-    async new(@Body() userDto: UserDto) {
-        return await this.userService.registerUser(userDto);
+    async new(@Body() userDto: UserDto, @Res() res: Response) {
+        const serviceResponse = await this.userService.registerUser(userDto);
+        res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
+        return;
     }
 
     @Put("update")

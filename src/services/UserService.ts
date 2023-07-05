@@ -1,8 +1,8 @@
 import { HttpStatus, Inject } from "@nestjs/common";
-import { DatabaseProvider } from "src/database/DatabaseProvider";
-import { User } from "src/interfaces/UserInterface";
-import { CustomException } from "src/utils/Errors/CustomException";
-import { Logger } from "src/utils/Logger";
+import { DatabaseProvider } from "database/DatabaseProvider";
+import { User } from "interfaces/UserInterface";
+import { CustomException } from "utils/Errors/CustomException";
+import { Logger } from "utils/Logger";
 
 export class UserService {
     constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider) {}
@@ -19,7 +19,12 @@ export class UserService {
             Logger.warn(`User ${user.email} error when trying to register`, user);
             throw new CustomException("Email Already registered", HttpStatus.CONFLICT);
         }
-        return await this.databaseService.registerUser(user);
+        await this.databaseService.registerUser(user);
+        return {
+            status: "success",
+            code: HttpStatus.CREATED,
+            message: `User ${user.email} registered`,
+        };
     }
 
     async updateUser(user: User) {

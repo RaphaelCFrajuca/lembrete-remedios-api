@@ -1,8 +1,8 @@
-import { MessageData } from "src/interfaces/ChannelInterface";
-import { PubSub } from "src/interfaces/PubSubInterface";
-import { Logger } from "src/utils/Logger";
+import { MessageData } from "interfaces/ChannelInterface";
+import { PubSub } from "interfaces/PubSubInterface";
+import { Logger } from "utils/Logger";
 import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
-import { PubSubCredentials } from "src/types/PubSubProviderType";
+import { PubSubCredentials } from "types/PubSubProviderType";
 
 export class AmazonPubSubService implements PubSub {
     constructor(private readonly topicName: string, private readonly credentials: PubSubCredentials) {}

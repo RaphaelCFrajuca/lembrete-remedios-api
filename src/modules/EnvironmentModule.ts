@@ -100,6 +100,14 @@ import { ConfigModule } from "@nestjs/config";
             provide: "NVOIP_API_URL",
             useValue: process.env.NVOIP_API_URL,
         },
+        {
+            provide: "AMAZON_SES_CREDENTIALS",
+            useValue: {
+                region: process.env.AMAZON_SES_REGION,
+                accessKeyId: process.env.AMAZON_SES_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AMAZON_SES_SECRET_ACCESS_KEY,
+            },
+        },
     ],
     exports: [
         "MONGODB_URI",
@@ -125,6 +133,7 @@ import { ConfigModule } from "@nestjs/config";
         "BREVO_API_URL",
         "MOBIZON_API_URL",
         "NVOIP_API_URL",
+        "AMAZON_SES_CREDENTIALS",
     ],
 })
 export class EnvironmentModule {}

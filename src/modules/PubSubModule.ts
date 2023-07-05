@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { EnvironmentModule } from "./EnvironmentModule";
-import { PubSubProvider } from "src/pubsub/PubSubProvider";
-import { pubSubFactory } from "src/ModuleFactorys";
+import { PubSubProvider } from "pubsub/PubSubProvider";
+import { pubSubFactory } from "ModuleFactorys";
 
 @Module({
     imports: [EnvironmentModule],

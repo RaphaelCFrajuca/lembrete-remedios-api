@@ -1,4 +1,4 @@
-import { Medication } from "src/interfaces/MedicationInterface";
+import { Medication } from "interfaces/MedicationInterface";
 import { Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity("medications")
@@ -50,5 +50,5 @@ export class MedicationEntity implements Medication {
     restricaoHospitalar: "SIM" | "NAO";
 
     @Column()
-    tarja: string;
+    tarja?: string;
 }

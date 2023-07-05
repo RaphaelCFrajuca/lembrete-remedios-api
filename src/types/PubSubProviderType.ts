@@ -1,5 +1,5 @@
-import { AmazonPubSubService } from "src/pubsub/providers/amazon/AmazonPubSubService";
-import { GooglePubSubService } from "src/pubsub/providers/google/GooglePubSubService";
+import { AmazonPubSubService } from "pubsub/providers/amazon/AmazonPubSubService";
+import { GooglePubSubService } from "pubsub/providers/google/GooglePubSubService";
 
 export enum PubSubProviderType {
     GOOGLE = "GOOGLE",

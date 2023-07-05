@@ -1,4 +1,4 @@
-import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
+import { Reminder, ReminderUser } from "interfaces/ReminderInterface";
 import { Column, Entity, ObjectId, ObjectIdColumn, PrimaryColumn } from "typeorm";
 
 @Entity("reminders")

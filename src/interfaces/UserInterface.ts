@@ -1,4 +1,4 @@
-import { ChannelProviderType } from "src/types/ChannelProviderType";
+import { ChannelProviderType } from "types/ChannelProviderType";
 
 export class User {
     nickname: string;

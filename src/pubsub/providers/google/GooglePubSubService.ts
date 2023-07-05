@@ -1,7 +1,7 @@
 import { PubSub as PubSubGoogle } from "@google-cloud/pubsub";
-import { MessageData } from "src/interfaces/ChannelInterface";
-import { PubSub } from "src/interfaces/PubSubInterface";
-import { Logger } from "src/utils/Logger";
+import { MessageData } from "interfaces/ChannelInterface";
+import { PubSub } from "interfaces/PubSubInterface";
+import { Logger } from "utils/Logger";
 
 export class GooglePubSubService implements PubSub {
     constructor(private readonly topicName: string, private readonly pubSub = new PubSubGoogle()) {}

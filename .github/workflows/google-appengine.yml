@@ -38,6 +38,11 @@ jobs:
           AMAZON_REGION: ${{ vars.AMAZON_REGION }}
 
           EMAIL_CHANNEL_PROVIDER: ${{ vars.EMAIL_CHANNEL_PROVIDER }}
+
+          AMAZON_SES_ACCESS_KEY_ID: ${{ secrets.AMAZON_SES_ACCESS_KEY_ID }}
+          AMAZON_SES_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_SES_SECRET_ACCESS_KEY }}
+          AMAZON_SES_REGION: ${{ vars.AMAZON_SES_REGION }}
+
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_API_URL: ${{ vars.BREVO_API_URL }}
 
@@ -73,6 +78,11 @@ jobs:
           echo "AMAZON_REGION=$AMAZON_REGION" >> .env-for-app-yaml
 
           echo "EMAIL_CHANNEL_PROVIDER=$EMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
+
+          echo "AMAZON_SES_ACCESS_KEY_ID=$AMAZON_SES_ACCESS_KEY_ID" >> .env-for-app-yaml
+          echo "AMAZON_SES_SECRET_ACCESS_KEY=$AMAZON_SES_SECRET_ACCESS_KEY" >> .env-for-app-yaml
+          echo "AMAZON_SES_REGION=$AMAZON_SES_REGION" >> .env-for-app-yaml
+
           echo "BREVO_API_KEY=$BREVO_API_KEY" >> .env-for-app-yaml
           echo "BREVO_API_URL=$BREVO_API_URL" >> .env-for-app-yaml
 
@@ -110,6 +120,9 @@ jobs:
 
       - name: Build the Nest.js app
         run: npm run build
+
+      - name: Test the Nest.js app
+        run: npm run test:cov
 
       - name: Configure gcloud CLI
         uses: google-github-actions/deploy-appengine@v1

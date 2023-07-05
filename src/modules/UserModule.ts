@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { EnvironmentModule } from "./EnvironmentModule";
-import { UserService } from "src/services/UserService";
-import { UserController } from "src/controllers/user/UserController";
-import { UserGuard } from "src/guards/UserGuard";
+import { UserService } from "services/UserService";
+import { UserController } from "controllers/user/UserController";
+import { UserGuard } from "guards/UserGuard";
 import { DatabaseModule } from "./DatabaseModule";
 
 @Module({

@@ -1,13 +1,13 @@
-import { Database } from "src/interfaces/DatabaseInterface";
-import { Medication } from "src/interfaces/MedicationInterface";
+import { Database } from "interfaces/DatabaseInterface";
+import { Medication } from "interfaces/MedicationInterface";
 import { DataSource } from "typeorm";
 import { MedicationEntity } from "../entities/MedicationEntity";
 import { HttpStatus, Inject } from "@nestjs/common";
-import { User } from "src/interfaces/UserInterface";
+import { User } from "interfaces/UserInterface";
 import { UserEntity } from "../entities/UserEntity";
-import { CustomException } from "src/utils/Errors/CustomException";
-import { Logger } from "src/utils/Logger";
-import { Reminder, ReminderUser } from "src/interfaces/ReminderInterface";
+import { CustomException } from "utils/Errors/CustomException";
+import { Logger } from "utils/Logger";
+import { Reminder, ReminderUser } from "interfaces/ReminderInterface";
 import { ReminderEntity, ReminderEntityMySQL } from "../entities/ReminderEntity";
 
 export class MySQLService implements Database {
@@ -18,6 +18,8 @@ export class MySQLService implements Database {
         @Inject("MYSQL_PASSWORD") private readonly password: string,
         @Inject("MYSQL_DATABASE_NAME") private readonly databaseName: string,
     ) {}
+
+    protected static dataSource: DataSource;
 
     async getNames(email: string): Promise<string[]> {
         const names = [];
@@ -42,7 +44,6 @@ export class MySQLService implements Database {
     async getReminders(email: string): Promise<ReminderUser[]> {
         const mysqlManager = await this.getDataSource();
         const reminders = await mysqlManager.getRepository(ReminderEntityMySQL).findOneBy({ email });
-        console.log(reminders?.reminders);
         return reminders?.reminders ? JSON.parse(reminders?.reminders) : null;
     }
 
@@ -89,31 +90,45 @@ export class MySQLService implements Database {
 
     async findUserByEmail(email: string): Promise<User | null> {
         const mysqlManager = await this.getDataSource();
-        return await mysqlManager.getRepository(UserEntity).findOneBy({ email });
+        const user = await mysqlManager.getRepository(UserEntity).findOneBy({ email });
+        return user ?? null;
     }
 
     async getMedicationsList(): Promise<Medication[]> {
         const mysqlManager = await this.getDataSource();
         const medicationList = await mysqlManager.getRepository(MedicationEntity).find();
         return medicationList
-            .map(medication => ({ value: medication.nome, label: medication.nome }))
+            .map(medication => ({ value: medication.nome, label: medication.nome, ...medication }))
             .filter((value, index, self) => {
                 return index === self.findIndex(obj => obj.value === value.value && obj.label === value.label);
             });
     }
 
+    async registerMedication(medication: Medication): Promise<void> {
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.getRepository(MedicationEntity).save(medication);
+        Logger.log(`Medication ${medication.label} registered`, medication);
+    }
+
     async getDataSource(): Promise<DataSource> {
-        const dataSource = new DataSource({
-            type: "mysql",
-            host: this.hostName,
-            port: this.port,
-            username: this.userName,
-            password: this.password,
-            entities: [MedicationEntity, UserEntity, ReminderEntity, ReminderEntityMySQL],
-            synchronize: false,
-            logging: false,
-            database: this.databaseName,
-        });
-        return await dataSource.initialize();
+        if (!MySQLService.dataSource) {
+            MySQLService.dataSource = new DataSource({
+                type: "mysql",
+                host: this.hostName,
+                port: this.port,
+                username: this.userName,
+                password: this.password,
+                entities: [MedicationEntity, UserEntity, ReminderEntity, ReminderEntityMySQL],
+                synchronize: false,
+                logging: false,
+                database: this.databaseName,
+            });
+        }
+        return MySQLService.dataSource.isInitialized ? MySQLService.dataSource : MySQLService.dataSource.initialize();
+    }
+
+    async destroy(): Promise<void> {
+        const mysqlManager = await this.getDataSource();
+        await mysqlManager.destroy();
     }
 }

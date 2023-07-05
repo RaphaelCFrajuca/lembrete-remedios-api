@@ -1,7 +1,7 @@
 import { Inject } from "@nestjs/common";
-import { DatabaseProvider } from "src/database/DatabaseProvider";
-import { Medication } from "src/interfaces/MedicationInterface";
-import { Logger } from "src/utils/Logger";
+import { DatabaseProvider } from "database/DatabaseProvider";
+import { Medication } from "interfaces/MedicationInterface";
+import { Logger } from "utils/Logger";
 
 export class MedicationsService {
     constructor(@Inject("DATABASE_SERVICE") private readonly databaseService: DatabaseProvider) {}

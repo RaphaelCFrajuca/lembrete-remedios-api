@@ -1,4 +1,4 @@
-import { ChannelProvider } from "src/channels/ChannelProvider";
+import { ChannelProvider } from "channels/ChannelProvider";
 import { ReminderMedication } from "./ReminderInterface";
 
 export interface Channel {

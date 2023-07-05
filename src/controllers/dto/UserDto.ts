@@ -1,6 +1,6 @@
 import { IsBoolean, IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from "class-validator";
-import { User } from "src/interfaces/UserInterface";
-import { ChannelProviderType } from "src/types/ChannelProviderType";
+import { User } from "interfaces/UserInterface";
+import { ChannelProviderType } from "types/ChannelProviderType";
 export class UserDto implements User {
     @IsNotEmpty()
     @IsString()

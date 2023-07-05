@@ -1,7 +1,7 @@
 import { HttpStatus } from "@nestjs/common";
 import axios from "axios";
-import { Channel, MessageData } from "src/interfaces/ChannelInterface";
-import { CustomException } from "src/utils/Errors/CustomException";
+import { Channel, MessageData } from "interfaces/ChannelInterface";
+import { CustomException } from "utils/Errors/CustomException";
 
 export class NvoipService implements Channel {
     constructor(private readonly sip: string, private readonly userToken: string, private readonly apiUrl: string) {}

@@ -1,6 +1,6 @@
-import { databaseFactory } from "src/ModuleFactorys";
+import { databaseFactory } from "ModuleFactorys";
 import { EnvironmentModule } from "./EnvironmentModule";
-import { DatabaseProvider } from "src/database/DatabaseProvider";
+import { DatabaseProvider } from "database/DatabaseProvider";
 import { Module } from "@nestjs/common";
 
 @Module({

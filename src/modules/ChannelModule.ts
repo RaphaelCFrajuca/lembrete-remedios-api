@@ -1,7 +1,7 @@
-import { channelFactory } from "src/ModuleFactorys";
+import { channelFactory } from "ModuleFactorys";
 import { EnvironmentModule } from "./EnvironmentModule";
 import { Module } from "@nestjs/common";
-import { ChannelProvider } from "src/channels/ChannelProvider";
+import { ChannelProvider } from "channels/ChannelProvider";
 import { DatabaseModule } from "./DatabaseModule";
 
 @Module({
@@ -22,6 +22,7 @@ import { DatabaseModule } from "./DatabaseModule";
                 "NVOIP_SID",
                 "NVOIP_USER_TOKEN",
                 "NVOIP_API_URL",
+                "AMAZON_SES_CREDENTIALS",
             ],
         },
     ],

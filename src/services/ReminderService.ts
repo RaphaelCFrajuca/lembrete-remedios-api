@@ -1,11 +1,11 @@
 import { HttpStatus, Inject } from "@nestjs/common";
-import { DatabaseProvider } from "src/database/DatabaseProvider";
-import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "src/interfaces/ReminderInterface";
-import { Logger } from "src/utils/Logger";
-import { ChannelService, MessageData } from "src/interfaces/ChannelInterface";
-import { PubSubProvider } from "src/pubsub/PubSubProvider";
-import { ChannelProviderType } from "src/types/ChannelProviderType";
-import { CustomException } from "src/utils/Errors/CustomException";
+import { DatabaseProvider } from "database/DatabaseProvider";
+import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "interfaces/ReminderInterface";
+import { Logger } from "utils/Logger";
+import { ChannelService, MessageData } from "interfaces/ChannelInterface";
+import { PubSubProvider } from "pubsub/PubSubProvider";
+import { ChannelProviderType } from "types/ChannelProviderType";
+import { CustomException } from "utils/Errors/CustomException";
 
 export class ReminderService {
     constructor(
@@ -107,52 +107,6 @@ export class ReminderService {
         return actualData;
     }
 
-    generateNewReminderUser(data: ReminderBase) {
-        const { fullName, medicationName, daysOfWeek, hour } = data;
-        let keyCounter0 = 1;
-
-        const reminderList: ReminderList[] = daysOfWeek.map((dayOfWeek: string) => {
-            let keyCounter1 = 1;
-            let keyCounter2 = 1;
-            const reminders: ReminderMedication[] = [
-                {
-                    uniqueId: Number(
-                        Math.floor(Math.random() * 1e10)
-                            .toString()
-                            .padStart(10, "0"),
-                    ),
-                    level: 1,
-                    key: keyCounter1++,
-                    medication: medicationName,
-                    hour,
-                },
-            ];
-            return {
-                uniqueId: Number(
-                    Math.floor(Math.random() * 1e10)
-                        .toString()
-                        .padStart(10, "0"),
-                ),
-                level: 1,
-                key: keyCounter2++,
-                dayOfWeek: dayOfWeek,
-                reminders,
-            };
-        });
-
-        return {
-            uniqueId: Number(
-                Math.floor(Math.random() * 1e10)
-                    .toString()
-                    .padStart(10, "0"),
-            ),
-            level: 0,
-            key: keyCounter0++,
-            name: fullName,
-            reminderList: reminderList,
-        };
-    }
-
     getDateHourUTCMinus3() {
         const now = new Date();
 
@@ -182,7 +136,8 @@ export class ReminderService {
     }
 
     async getNames(email: string) {
-        return await this.databaseService.getNames(email);
+        const names = await this.databaseService.getNames(email);
+        return names;
     }
 
     async new(body: ReminderBase, email: string) {

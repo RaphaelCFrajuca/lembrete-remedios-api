@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
 import { MedicationsService } from "../../services/MedicationsService";
-import { Medication } from "src/interfaces/MedicationInterface";
-import { UserGuard } from "src/guards/UserGuard";
+import { Medication } from "interfaces/MedicationInterface";
+import { UserGuard } from "guards/UserGuard";
 
 @Controller("medications")
 export class MedicationsController {

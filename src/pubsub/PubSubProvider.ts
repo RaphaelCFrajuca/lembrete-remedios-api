@@ -1,5 +1,5 @@
-import { MessageData } from "src/interfaces/ChannelInterface";
-import { PubSub } from "src/interfaces/PubSubInterface";
+import { MessageData } from "interfaces/ChannelInterface";
+import { PubSub } from "interfaces/PubSubInterface";
 
 export class PubSubProvider implements PubSub {
     constructor(private readonly provider: PubSub) {}

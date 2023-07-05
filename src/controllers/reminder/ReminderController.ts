@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
-import { UserGuard } from "src/guards/UserGuard";
-import { ReminderService } from "src/services/ReminderService";
+import { UserGuard } from "guards/UserGuard";
+import { ReminderService } from "services/ReminderService";
 import { FindReminderDto, ReminderDto } from "../dto/ReminderDto";
-import { CustomException } from "src/utils/Errors/CustomException";
+import { CustomException } from "utils/Errors/CustomException";
 import { ReminderBaseDto } from "../dto/ReminderBaseDto";
 import { PubSubRequestDto } from "../dto/PubSubRequestDto";
-import { MessageData } from "src/interfaces/ChannelInterface";
+import { MessageData } from "interfaces/ChannelInterface";
 import axios from "axios";
-import { Logger } from "src/utils/Logger";
+import { Logger } from "utils/Logger";
 
 @Controller("reminder")
 export class ReminderController {

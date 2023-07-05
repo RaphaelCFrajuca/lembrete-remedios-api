@@ -1,4 +1,4 @@
-import { ChannelProviderType } from "src/types/ChannelProviderType";
+import { ChannelProviderType } from "types/ChannelProviderType";
 
 export interface ReminderMedication {
     uniqueId?: number;

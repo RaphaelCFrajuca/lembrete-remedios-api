@@ -1,5 +1,5 @@
-import { User } from "src/interfaces/UserInterface";
-import { ChannelProviderType } from "src/types/ChannelProviderType";
+import { User } from "interfaces/UserInterface";
+import { ChannelProviderType } from "types/ChannelProviderType";
 import { Entity, Column, PrimaryColumn, ObjectIdColumn, ObjectId } from "typeorm";
 
 @Entity("users")

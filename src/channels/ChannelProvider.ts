@@ -1,4 +1,4 @@
-import { Channel, MessageData } from "src/interfaces/ChannelInterface";
+import { Channel, MessageData } from "interfaces/ChannelInterface";
 
 export class ChannelProvider implements Channel {
     constructor(private readonly provider: Channel) {}

@@ -1,7 +1,14 @@
 import { ChannelProvider } from "./channels/ChannelProvider";
 import { DatabaseProvider } from "./database/DatabaseProvider";
 import { PubSubProvider } from "./pubsub/PubSubProvider";
-import { ChannelProviderMap, ChannelProviderType, EmailChannelProviderType, SmsChannelProviderType, VoiceMailChannelProviderType } from "./types/ChannelProviderType";
+import {
+    AmazonSESCredentials,
+    ChannelProviderMap,
+    ChannelProviderType,
+    EmailChannelProviderType,
+    SmsChannelProviderType,
+    VoiceMailChannelProviderType,
+} from "./types/ChannelProviderType";
 import { DatabaseProviderMap, DatabaseProviderType } from "./types/DatabaseProviderType";
 import { PubSubCredentials, PubSubProviderMap, PubSubProviderType } from "./types/PubSubProviderType";
 import { Logger } from "./utils/Logger";
@@ -59,6 +66,7 @@ export function channelFactory(
     nvoipSid: string,
     nvoipUserToken: string,
     nvoipApiUrl: string,
+    amazonSesCredentials: AmazonSESCredentials,
 ) {
     const provider = {};
 
@@ -66,7 +74,7 @@ export function channelFactory(
         get: () =>
             new ChannelProvider(
                 ChannelProviderMap[ChannelProviderType.EMAIL].factory(
-                    [brevoApiKey, brevoApiUrl, mobizonApiKey, mobizonApiUrl, nvoipSid, nvoipUserToken, nvoipApiUrl],
+                    [brevoApiKey, brevoApiUrl, mobizonApiKey, mobizonApiUrl, nvoipSid, nvoipUserToken, nvoipApiUrl, amazonSesCredentials],
                     emailProvider,
                 ),
             ),

@@ -1,5 +1,5 @@
-import { MongoDBService } from "src/database/services/MongoDBService";
-import { MySQLService } from "src/database/services/MySQLService";
+import { MongoDBService } from "database/services/MongoDBService";
+import { MySQLService } from "database/services/MySQLService";
 
 export enum DatabaseProviderType {
     MONGODB = "MONGODB",

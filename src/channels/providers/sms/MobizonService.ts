@@ -1,7 +1,7 @@
 import { HttpStatus } from "@nestjs/common";
 import axios from "axios";
-import { Channel, MessageData } from "src/interfaces/ChannelInterface";
-import { CustomException } from "src/utils/Errors/CustomException";
+import { Channel, MessageData } from "interfaces/ChannelInterface";
+import { CustomException } from "utils/Errors/CustomException";
 
 export class MobizonService implements Channel {
     constructor(private readonly apiKey: string, private readonly apiUrl: string) {}
