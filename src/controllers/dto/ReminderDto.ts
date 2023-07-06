@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsArray, IsEmail, IsNotEmpty, IsNotEmptyObject, IsNumber, IsString, ValidateNested } from "class-validator";
 import { ReminderList, ReminderUser } from "interfaces/ReminderInterface";
 
@@ -18,8 +19,8 @@ export class ReminderDto implements ReminderUser {
     @IsString()
     name: string;
 
-    @IsNotEmptyObject()
     @IsArray()
+    @Type(() => ReminderList)
     @ValidateNested({ each: true })
     reminderList: ReminderList[];
 }

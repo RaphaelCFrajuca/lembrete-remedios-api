@@ -24,7 +24,7 @@ export class MySQLService implements Database {
     async getNames(email: string): Promise<string[]> {
         const names = [];
         const reminders = await this.getReminders(email);
-        reminders.map(item => {
+        reminders?.map(item => {
             names.push(item.name);
         });
         return names;
@@ -41,7 +41,7 @@ export class MySQLService implements Database {
         return users;
     }
 
-    async getReminders(email: string): Promise<ReminderUser[]> {
+    async getReminders(email: string): Promise<ReminderUser[] | null> {
         const mysqlManager = await this.getDataSource();
         const reminders = await mysqlManager.getRepository(ReminderEntityMySQL).findOneBy({ email });
         return reminders?.reminders ? JSON.parse(reminders?.reminders) : null;

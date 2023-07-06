@@ -20,7 +20,8 @@ export class SQLiteServiceFake extends MySQLService {
 
     async destroy(): Promise<void> {
         const mysqlManager = MySQLService.dataSource;
-        if (mysqlManager !== undefined) {
+        if (mysqlManager !== undefined && mysqlManager.isInitialized) {
+            await mysqlManager.dropDatabase();
             await mysqlManager.destroy();
         }
     }

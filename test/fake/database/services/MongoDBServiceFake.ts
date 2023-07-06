@@ -25,7 +25,7 @@ export class MongoDBServiceFake extends MongoDBService {
 
     async destroy(): Promise<void> {
         const mongoManager = MongoDBService.dataSource;
-        if (mongoManager !== undefined) {
+        if (mongoManager !== undefined && mongoManager.isInitialized) {
             await mongoManager.destroy();
             await MongoDBServiceFake.mongoServer.stop();
         }

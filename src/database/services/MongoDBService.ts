@@ -18,7 +18,7 @@ export class MongoDBService implements Database {
     async getNames(email: string): Promise<string[]> {
         const names = [];
         const reminders = await this.getReminders(email);
-        reminders.map(item => {
+        reminders?.map(item => {
             names.push(item.name);
         });
         return names;
@@ -30,7 +30,7 @@ export class MongoDBService implements Database {
         return users;
     }
 
-    async getReminders(email: string): Promise<ReminderUser[]> {
+    async getReminders(email: string): Promise<ReminderUser[] | null> {
         const mongoManager = await this.getDataSource();
         const reminders = await mongoManager.getMongoRepository(ReminderEntityMongo).findOneBy({ email });
         return reminders?.reminders ?? null;

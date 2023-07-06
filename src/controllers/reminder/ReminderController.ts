@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, ParseArrayPipe, Post, Put, Query, Request, Res, UseGuards } from "@nestjs/common";
 import { UserGuard } from "guards/UserGuard";
 import { ReminderService } from "services/ReminderService";
 import { FindReminderDto, ReminderDto } from "../dto/ReminderDto";
@@ -8,6 +8,8 @@ import { PubSubRequestDto } from "../dto/PubSubRequestDto";
 import { MessageData } from "interfaces/ChannelInterface";
 import axios from "axios";
 import { Logger } from "utils/Logger";
+import { validateOrReject } from "class-validator";
+import { plainToInstance } from "class-transformer";
 
 @Controller("reminder")
 export class ReminderController {
@@ -62,7 +64,14 @@ export class ReminderController {
         }
         if (request.headers["user-agent"] === "CloudPubSub-Google") {
             const channel = body.message.attributes.channel;
-            const messageData: MessageData = JSON.parse(Buffer.from(body.message.data, "base64").toString("utf-8")).messageData;
+            const messageData: MessageData = plainToInstance(MessageData, JSON.parse(Buffer.from(body.message.data, "base64").toString("utf-8")).messageData);
+            try {
+                await validateOrReject(messageData);
+            } catch (errors) {
+                Logger.error("Invalid Message Data", { errors });
+                res.status(HttpStatus.BAD_REQUEST).json({ status: "error", message: "Invalid Message Data" });
+                return;
+            }
             const serviceResponse = await this.reminderService.send(channel, messageData);
             res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         } else if (request.headers["user-agent"] === "Amazon Simple Notification Service Agent") {
@@ -73,7 +82,14 @@ export class ReminderController {
                 return;
             }
             const channel = body.MessageAttributes.channel.Value;
-            const messageData: MessageData = JSON.parse(body.Message);
+            const messageData: MessageData = plainToInstance(MessageData, JSON.parse(body.Message));
+            try {
+                await validateOrReject(messageData);
+            } catch (errors) {
+                Logger.error("Invalid Message Data", { errors });
+                res.status(HttpStatus.BAD_REQUEST).json({ status: "error", message: "Invalid Message Data" });
+                return;
+            }
             const serviceResponse = await this.reminderService.send(channel, messageData);
             res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         } else {
@@ -84,7 +100,7 @@ export class ReminderController {
 
     @Put("update")
     @UseGuards(UserGuard)
-    async update(@Body() body: ReminderDto[], @Res() res, @Request() request) {
+    async update(@Body(new ParseArrayPipe({ items: ReminderDto })) body: ReminderDto[], @Res() res, @Request() request) {
         const serviceResponse = await this.reminderService.update(body, request.user?.email);
         res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         return;
@@ -92,7 +108,7 @@ export class ReminderController {
 
     @Delete("delete")
     @UseGuards(UserGuard)
-    async delete(@Body() body: ReminderDto[], @Res() res, @Request() request) {
+    async delete(@Body(new ParseArrayPipe({ items: ReminderDto })) body: ReminderDto[], @Res() res, @Request() request) {
         const serviceResponse = await this.reminderService.delete(body, request.user?.email);
         res.status(serviceResponse.code).json({ status: serviceResponse.status, message: serviceResponse.message });
         return;

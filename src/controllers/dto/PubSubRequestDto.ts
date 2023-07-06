@@ -1,6 +1,6 @@
 import { IsObject, IsString } from "class-validator";
 
-class AmazonMessage {
+export class AmazonMessage {
     @IsString()
     Type?: string;
 
@@ -40,7 +40,7 @@ class AmazonMessage {
     };
 }
 
-class GoogleMessage {
+export class GoogleMessage {
     @IsObject()
     message?: {
         attributes: {

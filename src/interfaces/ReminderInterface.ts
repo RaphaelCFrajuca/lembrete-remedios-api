@@ -1,6 +1,6 @@
 import { ChannelProviderType } from "types/ChannelProviderType";
 
-export interface ReminderMedication {
+export class ReminderMedication {
     uniqueId?: number;
     level?: number;
     key?: number;
@@ -8,7 +8,7 @@ export interface ReminderMedication {
     hour: string;
 }
 
-export interface ReminderList {
+export class ReminderList {
     uniqueId: number;
     level: number;
     key: number;
@@ -16,7 +16,7 @@ export interface ReminderList {
     reminders: ReminderMedication[];
 }
 
-export interface ReminderUser {
+export class ReminderUser {
     uniqueId: number;
     level: number;
     key: number;
@@ -24,18 +24,18 @@ export interface ReminderUser {
     reminderList: ReminderList[];
 }
 
-export interface Reminder {
+export class Reminder {
     email: string;
     reminders: ReminderUser[] | string;
 }
 
-export interface ReminderBase {
+export class ReminderBase {
     fullName: string;
     medicationName: string;
     daysOfWeek: string[];
     hour: string;
 }
-export interface ReminderToSchedule {
+export class ReminderToSchedule {
     email: string;
     name: string;
     phone: string;
