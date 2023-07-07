@@ -141,7 +141,7 @@ describe("ReminderService (unit)", () => {
 
     it("should return the correct day of the week and hour", () => {
         const fixedDate = new Date("2022-01-01T12:00:00Z");
-        jest.spyOn(global, "Date").mockImplementation(() => fixedDate);
+        jest.useFakeTimers().setSystemTime(fixedDate);
 
         const expectedDayOfWeek = "Sábado";
         const expectedHour = "09:00";
