@@ -22,73 +22,75 @@ describe("MedicationsService (integration)", () => {
         await databaseProvider.destroy();
     });
 
-    it("should get medication list", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => null);
+    describe("getMedicationsList", () => {
+        it("should get medication list", async () => {
+            jest.spyOn(console, "log").mockImplementation(() => null);
 
-        const mockMedicationsList: Medication[] = [
-            {
-                value: "DIPIRONA",
-                label: "DIPIRONA",
-                apresentacao: "",
-                classeTerapeutica: "",
-                laboratorioCnpj: "",
-                laboratorioNome: "",
-                laboratorioRegistro: 0,
-                nome: "DIPIRONA",
-                precoFabrica: "",
-                precoConsumidor0: "",
-                precoConsumidor12: "",
-                precoConsumidor17: "",
-                precoConsumidor20: "",
-                restricaoHospitalar: "NAO",
-                tarja: "",
-                tipo: "",
-                principioAtivo: "",
-            },
-            {
-                value: "PARACETAMOL",
-                label: "PARACETAMOL",
-                apresentacao: "",
-                classeTerapeutica: "",
-                laboratorioCnpj: "",
-                laboratorioNome: "",
-                laboratorioRegistro: 0,
-                nome: "PARACETAMOL",
-                precoFabrica: "",
-                precoConsumidor0: "",
-                precoConsumidor12: "",
-                precoConsumidor17: "",
-                precoConsumidor20: "",
-                restricaoHospitalar: "NAO",
-                tarja: "",
-                tipo: "",
-                principioAtivo: "",
-            },
-            {
-                value: "NIMESULIDA",
-                label: "NIMESULIDA",
-                apresentacao: "",
-                classeTerapeutica: "",
-                laboratorioCnpj: "",
-                laboratorioNome: "",
-                laboratorioRegistro: 0,
-                nome: "NIMESULIDA",
-                precoFabrica: "",
-                precoConsumidor0: "",
-                precoConsumidor12: "",
-                precoConsumidor17: "",
-                precoConsumidor20: "",
-                restricaoHospitalar: "NAO",
-                tarja: "",
-                tipo: "",
-                principioAtivo: "",
-            },
-        ];
-        for (const medication of mockMedicationsList) {
-            await databaseProvider.registerMedication(medication);
-        }
+            const mockMedicationsList: Medication[] = [
+                {
+                    value: "DIPIRONA",
+                    label: "DIPIRONA",
+                    apresentacao: "",
+                    classeTerapeutica: "",
+                    laboratorioCnpj: "",
+                    laboratorioNome: "",
+                    laboratorioRegistro: 0,
+                    nome: "DIPIRONA",
+                    precoFabrica: "",
+                    precoConsumidor0: "",
+                    precoConsumidor12: "",
+                    precoConsumidor17: "",
+                    precoConsumidor20: "",
+                    restricaoHospitalar: "NAO",
+                    tarja: "",
+                    tipo: "",
+                    principioAtivo: "",
+                },
+                {
+                    value: "PARACETAMOL",
+                    label: "PARACETAMOL",
+                    apresentacao: "",
+                    classeTerapeutica: "",
+                    laboratorioCnpj: "",
+                    laboratorioNome: "",
+                    laboratorioRegistro: 0,
+                    nome: "PARACETAMOL",
+                    precoFabrica: "",
+                    precoConsumidor0: "",
+                    precoConsumidor12: "",
+                    precoConsumidor17: "",
+                    precoConsumidor20: "",
+                    restricaoHospitalar: "NAO",
+                    tarja: "",
+                    tipo: "",
+                    principioAtivo: "",
+                },
+                {
+                    value: "NIMESULIDA",
+                    label: "NIMESULIDA",
+                    apresentacao: "",
+                    classeTerapeutica: "",
+                    laboratorioCnpj: "",
+                    laboratorioNome: "",
+                    laboratorioRegistro: 0,
+                    nome: "NIMESULIDA",
+                    precoFabrica: "",
+                    precoConsumidor0: "",
+                    precoConsumidor12: "",
+                    precoConsumidor17: "",
+                    precoConsumidor20: "",
+                    restricaoHospitalar: "NAO",
+                    tarja: "",
+                    tipo: "",
+                    principioAtivo: "",
+                },
+            ];
+            for (const medication of mockMedicationsList) {
+                await databaseProvider.registerMedication(medication);
+            }
 
-        const result = await medicationsService.getMedicationsList();
-        expect(result).toEqual(mockMedicationsList);
+            const result = await medicationsService.getMedicationsList();
+            expect(result).toEqual(mockMedicationsList);
+        });
     });
 });

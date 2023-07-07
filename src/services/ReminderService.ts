@@ -162,6 +162,10 @@ export class ReminderService {
     }
 
     async update(reminders: ReminderUser[], email: string) {
+        const actualReminders = await this.databaseService.getReminders(email);
+        if (actualReminders === null) {
+            throw new CustomException("Reminders not found", HttpStatus.NOT_FOUND);
+        }
         await this.databaseService.updateReminders(reminders, email);
         return {
             status: "success",
@@ -171,10 +175,14 @@ export class ReminderService {
     }
 
     async delete(reminders: ReminderUser[], email: string) {
-        if (reminders.length !== 0) {
-            await this.update(reminders, email);
+        if ((await this.get(email)) === null) {
+            throw new CustomException("Reminders not found", HttpStatus.NOT_FOUND);
         } else {
-            await this.databaseService.deleteReminders(reminders, email);
+            if (reminders.length !== 0) {
+                await this.update(reminders, email);
+            } else {
+                await this.databaseService.deleteReminders(reminders, email);
+            }
         }
 
         return {
