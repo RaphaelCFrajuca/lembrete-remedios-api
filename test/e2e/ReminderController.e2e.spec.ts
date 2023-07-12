@@ -13,6 +13,7 @@ import { ChannelProviderType } from "types/ChannelProviderType";
 import { User } from "interfaces/UserInterface";
 import { ChannelService, MessageData } from "interfaces/ChannelInterface";
 import { AmazonMessage, GoogleMessage } from "controllers/dto/PubSubRequestDto";
+import axios from "axios";
 
 describe("ReminderController (e2e)", () => {
     let app: INestApplication;
@@ -152,6 +153,15 @@ describe("ReminderController (e2e)", () => {
                 email: "fake@fake.com",
             });
             expect(response.body).toEqual("");
+        });
+
+        it("should get an error when try to get reminders for other user than provided in jwt", async () => {
+            jest.spyOn(console, "log").mockImplementation(() => null);
+
+            const response = await request(app.getHttpServer()).get("/reminder").query({
+                email: "fake-not-my-user@fake.com",
+            });
+            expect(response.body).toEqual({ message: "User fake@fake.com not authorized to get fake-not-my-user@fake.com reminders", statusCode: 403 });
         });
     });
 
@@ -498,6 +508,148 @@ describe("ReminderController (e2e)", () => {
                     break;
             }
             expect(channelSpy).toHaveBeenCalledTimes(0);
+            expect(channelSpy).not.toHaveBeenCalled();
+        });
+
+        it("should not send reminder when user agent is invalid", async () => {
+            jest.spyOn(console, "error").mockImplementation(() => null);
+
+            const mockMessageData = {
+                email: mockUser.email,
+                channel: mockUser.reminderChannel,
+                name: mockUser.name,
+                phone: mockUser.phone,
+                reminder: {
+                    hour: mockReminderList[0].reminderList[0].reminders[0].hour,
+                    medication: mockReminderList[0].reminderList[0].reminders[0].medication,
+                },
+            };
+            const mockPubSubMessage: GoogleMessage = {
+                message: {
+                    attributes: { channel: ChannelProviderType.DEFAULT },
+                    data: Buffer.from(JSON.stringify({ messageData: mockMessageData })).toString("base64"),
+                    messageId: "123456789",
+                    message_id: "123456789",
+                    publishTime: "2023-06-17T22:43:51.179Z",
+                    publish_time: "2023-06-17T22:43:51.179Z",
+                },
+                subscription: "projects/fake-project/subscriptions/fake-subscription",
+            };
+            const response = await request(app.getHttpServer())
+                .post("/reminder/send")
+                .set("Content-Type", "application/json")
+                .set("User-Agent", "Invalid User Agent")
+                .send(JSON.stringify(mockPubSubMessage));
+            expect(response.body).toEqual({
+                status: "error",
+                message: "Invalid User Agent",
+            });
+            let channelSpy;
+            switch (mockMessageData.channel) {
+                case ChannelProviderType.EMAIL:
+                    channelSpy = jest.spyOn(channelService.email, "send");
+                    break;
+                case ChannelProviderType.SMS:
+                    channelSpy = jest.spyOn(channelService.sms, "send");
+                    break;
+                case ChannelProviderType.VOICEMAIL:
+                    channelSpy = jest.spyOn(channelService.voicemail, "send");
+                    break;
+            }
+            expect(channelSpy).toHaveBeenCalledTimes(0);
+            expect(channelSpy).not.toHaveBeenCalled();
+        });
+
+        it("should not send reminder when content-type is invalid", async () => {
+            jest.spyOn(console, "error").mockImplementation(() => null);
+
+            const mockMessageData = {
+                email: mockUser.email,
+                channel: mockUser.reminderChannel,
+                name: mockUser.name,
+                phone: mockUser.phone,
+                reminder: {
+                    hour: mockReminderList[0].reminderList[0].reminders[0].hour,
+                    medication: mockReminderList[0].reminderList[0].reminders[0].medication,
+                },
+            };
+            const mockPubSubMessage: GoogleMessage = {
+                message: {
+                    attributes: { channel: ChannelProviderType.DEFAULT },
+                    data: Buffer.from(JSON.stringify({ messageData: mockMessageData })).toString("base64"),
+                    messageId: "123456789",
+                    message_id: "123456789",
+                    publishTime: "2023-06-17T22:43:51.179Z",
+                    publish_time: "2023-06-17T22:43:51.179Z",
+                },
+                subscription: "projects/fake-project/subscriptions/fake-subscription",
+            };
+            const response = await request(app.getHttpServer())
+                .post("/reminder/send")
+                .set("Content-Type", "application/invalid")
+                .set("User-Agent", "CloudPubSub-Google")
+                .send(JSON.stringify(mockPubSubMessage));
+            expect(response.body).toEqual({
+                status: "error",
+                message: "Invalid Content-Type",
+            });
+            let channelSpy;
+            switch (mockMessageData.channel) {
+                case ChannelProviderType.EMAIL:
+                    channelSpy = jest.spyOn(channelService.email, "send");
+                    break;
+                case ChannelProviderType.SMS:
+                    channelSpy = jest.spyOn(channelService.sms, "send");
+                    break;
+                case ChannelProviderType.VOICEMAIL:
+                    channelSpy = jest.spyOn(channelService.voicemail, "send");
+                    break;
+            }
+            expect(channelSpy).toHaveBeenCalledTimes(0);
+            expect(channelSpy).not.toHaveBeenCalled();
+        });
+
+        it("should send reminder when user agent is from Amazon Pub/Sub (SNS)", async () => {
+            jest.spyOn(console, "log").mockImplementation(() => null);
+
+            const mockMessageData: MessageData = {
+                email: mockUser.email,
+                channel: mockUser.reminderChannel,
+                name: mockUser.name,
+                phone: mockUser.phone,
+                reminder: {
+                    hour: mockReminderList[0].reminderList[0].reminders[0].hour,
+                    medication: mockReminderList[0].reminderList[0].reminders[0].medication,
+                },
+            };
+            const mockPubSubMessage: AmazonMessage = {
+                Type: "SubscriptionConfirmation",
+                SubscribeURL: "https://fake.com/subscribe",
+            };
+
+            jest.spyOn(axios, "get").mockResolvedValueOnce(null);
+
+            const response = await request(app.getHttpServer())
+                .post("/reminder/send")
+                .set("Content-Type", "application/json")
+                .set("User-Agent", "Amazon Simple Notification Service Agent")
+                .send(JSON.stringify(mockPubSubMessage));
+            expect(response.body).toEqual({
+                status: "success",
+                message: "Subscription Confirmed",
+            });
+            let channelSpy;
+            switch (mockMessageData.channel) {
+                case ChannelProviderType.EMAIL:
+                    channelSpy = jest.spyOn(channelService.email, "send");
+                    break;
+                case ChannelProviderType.SMS:
+                    channelSpy = jest.spyOn(channelService.sms, "send");
+                    break;
+                case ChannelProviderType.VOICEMAIL:
+                    channelSpy = jest.spyOn(channelService.voicemail, "send");
+                    break;
+            }
             expect(channelSpy).not.toHaveBeenCalled();
         });
     });

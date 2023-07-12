@@ -33,11 +33,7 @@ export class ReminderController {
     @UseGuards(UserGuard)
     async getNames(@Res() res, @Request() request) {
         const reminders = await this.reminderService.getNames(request.user?.email);
-        if (reminders) {
-            res.status(HttpStatus.OK).json(reminders);
-        } else {
-            res.status(HttpStatus.NOT_FOUND).json([]);
-        }
+        res.status(HttpStatus.OK).json(reminders);
     }
 
     @Post("new")
