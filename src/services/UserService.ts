@@ -29,6 +29,11 @@ export class UserService {
 
     async updateUser(user: User) {
         Logger.log(`Updating user (${user.email})`, this);
+        const userAlreadyRegistered = await this.findByEmail(user.email);
+        if (!userAlreadyRegistered) {
+            Logger.warn(`User ${user.email} error when trying to update`, user);
+            throw new CustomException("Email Not registered", HttpStatus.CONFLICT);
+        }
         await this.databaseService.updateUser(user);
         return {
             status: "success",
@@ -39,6 +44,11 @@ export class UserService {
 
     async deleteUser(email: string) {
         Logger.log(`Removing user (${email})`, this);
+        const userAlreadyRegistered = await this.findByEmail(email);
+        if (!userAlreadyRegistered) {
+            Logger.warn(`User ${email} error when trying to delete`, email);
+            throw new CustomException("Email Not registered", HttpStatus.CONFLICT);
+        }
         await this.databaseService.deleteUser(email);
         return {
             status: "success",

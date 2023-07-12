@@ -43,6 +43,18 @@ describe("UserService (integration)", () => {
         await databaseProvider.destroy();
     });
 
+    describe("findByEmail", () => {
+        it("should find an existing user", async () => {
+            const result = await userService.findByEmail(mockUser.email);
+            expect(result).toEqual(mockUser);
+        });
+
+        it("should return null when find an not existing user", async () => {
+            const result = await userService.findByEmail("fake-not-exist@fake.com");
+            expect(result).toEqual(null);
+        });
+    });
+
     describe("registerUser", () => {
         it("should register a new user", async () => {
             const user: User = {
@@ -78,6 +90,17 @@ describe("UserService (integration)", () => {
             });
             expect((await databaseProvider.findUserByEmail(mockUser.email)).name).toEqual("Updated");
         });
+
+        it("should not update an invalid/not existing user", async () => {
+            const newMockUser = { ...mockUser };
+            newMockUser.email = "fake-not-exist@fake.com";
+            newMockUser.name = "Updated2";
+            newMockUser.phone = "5511999999998";
+            const result = userService.updateUser(newMockUser);
+
+            expect(result).rejects.toThrowError("Email Not registered");
+            expect(await databaseProvider.findUserByEmail(newMockUser.email)).toEqual(null);
+        });
     });
 
     describe("deleteUser", () => {
@@ -90,6 +113,17 @@ describe("UserService (integration)", () => {
                 message: `User ${mockUser.email} deleted`,
             });
             expect(await databaseProvider.findUserByEmail(mockUser.email)).toEqual(null);
+        });
+
+        it("should not delete an invalid/not existing user", async () => {
+            const newMockUser = { ...mockUser };
+            newMockUser.email = "fake-not-exist@fake.com";
+            newMockUser.name = "Updated2";
+            newMockUser.phone = "5511999999998";
+            const result = userService.deleteUser(newMockUser.email);
+
+            expect(result).rejects.toThrowError("Email Not registered");
+            expect(await databaseProvider.findUserByEmail(newMockUser.email)).toEqual(null);
         });
     });
 });
