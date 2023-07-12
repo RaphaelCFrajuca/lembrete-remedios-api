@@ -1,7 +1,7 @@
 import { DatabaseProvider } from "database/DatabaseProvider";
 import { User } from "interfaces/UserInterface";
 import { UserService } from "services/UserService";
-import { DatabaseModuleFake } from "../fake/database/DatabaseModuleFake";
+import { DatabaseModuleFake } from "../../fake/database/DatabaseModuleFake";
 import { ChannelProviderType } from "types/ChannelProviderType";
 import { Test } from "@nestjs/testing";
 import { HttpStatus } from "@nestjs/common";

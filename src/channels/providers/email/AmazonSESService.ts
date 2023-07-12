@@ -1,6 +1,8 @@
 import { Channel, MessageData } from "interfaces/ChannelInterface";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import * as fs from "fs";
+import { CustomException } from "utils/Errors/CustomException";
+import { HttpStatus } from "@nestjs/common";
 
 export class AmazonSESService implements Channel {
     constructor(private readonly accessKeyId: string, private readonly secretAccessKey: string, private readonly region: string) {}
@@ -41,7 +43,7 @@ export class AmazonSESService implements Channel {
             const data = await sesClient.send(new SendEmailCommand(params));
             return data;
         } catch (error) {
-            console.error(error);
+            throw new CustomException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

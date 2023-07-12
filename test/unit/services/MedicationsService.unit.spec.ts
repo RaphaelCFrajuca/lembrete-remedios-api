@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing";
-import { MedicationsService } from "../../src/services/MedicationsService";
-import { DatabaseProvider } from "../../src/database/DatabaseProvider";
+import { MedicationsService } from "../../../src/services/MedicationsService";
+import { DatabaseProvider } from "../../../src/database/DatabaseProvider";
 
 describe("MedicationsService (unit)", () => {
     let medicationsService: MedicationsService;

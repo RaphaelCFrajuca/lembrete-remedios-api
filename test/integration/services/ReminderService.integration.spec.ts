@@ -1,9 +1,9 @@
 import { Test } from "@nestjs/testing";
-import { DatabaseProvider } from "../../src/database/DatabaseProvider";
+import { DatabaseProvider } from "../../../src/database/DatabaseProvider";
 import { ReminderService } from "services/ReminderService";
 import { ReminderBase, ReminderUser } from "interfaces/ReminderInterface";
 import { HttpStatusCode } from "axios";
-import { DatabaseModuleFake } from "../fake/database/DatabaseModuleFake";
+import { DatabaseModuleFake } from "../../fake/database/DatabaseModuleFake";
 import { PubSubProvider } from "pubsub/PubSubProvider";
 import { User } from "interfaces/UserInterface";
 import { ChannelProviderType } from "types/ChannelProviderType";

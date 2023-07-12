@@ -1,38 +1,28 @@
-import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { UserGuard } from "guards/UserGuard";
-import * as request from "supertest";
-import { EnvironmentModuleFake } from "../fake/environment/EnvironmentModuleFake";
-import { MedicationsService } from "services/MedicationsService";
-import { DatabaseModuleFake } from "../fake/database/DatabaseModuleFake";
-import { MedicationsController } from "controllers/medications/MedicationsController";
-import { DatabaseProvider } from "database/DatabaseProvider";
+import { MedicationsService } from "../../../src/services/MedicationsService";
+import { DatabaseProvider } from "../../../src/database/DatabaseProvider";
+import { DatabaseModuleFake } from "../../fake/database/DatabaseModuleFake";
 import { Medication } from "interfaces/MedicationInterface";
 
-describe("MedicationsController (e2e)", () => {
-    let app: INestApplication;
+describe("MedicationsService (integration)", () => {
+    let medicationsService: MedicationsService;
     let databaseProvider: DatabaseProvider;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [EnvironmentModuleFake, DatabaseModuleFake],
-            controllers: [MedicationsController],
+            imports: [DatabaseModuleFake],
             providers: [MedicationsService],
-        })
-            .overrideGuard(UserGuard)
-            .useValue({ canActivate: () => true })
-            .compile();
-        app = moduleRef.createNestApplication();
-        await app.init();
+        }).compile();
+
+        medicationsService = moduleRef.get<MedicationsService>(MedicationsService);
         databaseProvider = moduleRef.get<DatabaseProvider>("DATABASE_SERVICE");
     });
 
     afterAll(async () => {
-        await app.close();
         await databaseProvider.destroy();
     });
 
-    describe("/medications", () => {
+    describe("getMedicationsList", () => {
         it("should get medication list", async () => {
             jest.spyOn(console, "log").mockImplementation(() => null);
 
@@ -95,13 +85,12 @@ describe("MedicationsController (e2e)", () => {
                     principioAtivo: "",
                 },
             ];
-
             for (const medication of mockMedicationsList) {
                 await databaseProvider.registerMedication(medication);
             }
 
-            const response = await request(app.getHttpServer()).get("/medications");
-            expect(response.body).toEqual(mockMedicationsList);
+            const result = await medicationsService.getMedicationsList();
+            expect(result).toEqual(mockMedicationsList);
         });
     });
 });

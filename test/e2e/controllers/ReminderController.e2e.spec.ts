@@ -2,8 +2,8 @@ import { ExecutionContext, INestApplication, ValidationPipe } from "@nestjs/comm
 import { Test } from "@nestjs/testing";
 import { UserGuard } from "guards/UserGuard";
 import * as request from "supertest";
-import { EnvironmentModuleFake } from "../fake/environment/EnvironmentModuleFake";
-import { DatabaseModuleFake } from "../fake/database/DatabaseModuleFake";
+import { EnvironmentModuleFake } from "../../fake/environment/EnvironmentModuleFake";
+import { DatabaseModuleFake } from "../../fake/database/DatabaseModuleFake";
 import { DatabaseProvider } from "database/DatabaseProvider";
 import { ReminderController } from "controllers/reminder/ReminderController";
 import { ReminderService } from "services/ReminderService";
