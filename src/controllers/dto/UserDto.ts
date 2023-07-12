@@ -35,7 +35,7 @@ export class UserDto implements User {
     email: string;
 
     @IsNotEmpty()
-    @IsPhoneNumber()
+    @IsPhoneNumber("BR")
     phone: string;
 
     @IsNotEmpty()
