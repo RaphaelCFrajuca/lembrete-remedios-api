@@ -90,6 +90,10 @@
     "collectCoverageFrom": [
       "**/*.ts",
       "!src/main.ts",
+      "!src/modules/**/*.ts",
+      "!src/guards/**/*.ts",
+      "!src/LembreteRemediosModule.ts",
+      "!src/ModuleFactorys.ts",
       "!dist/**",
       "!test/**/*.ts",
       "!node_modules/**"
