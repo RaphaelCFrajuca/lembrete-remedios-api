@@ -6,6 +6,7 @@ import { ChannelService, MessageData } from "interfaces/ChannelInterface";
 import { PubSubProvider } from "pubsub/PubSubProvider";
 import { ChannelProviderType } from "types/ChannelProviderType";
 import { CustomException } from "utils/Errors/CustomException";
+import { randomBytes } from "crypto";
 
 export class ReminderService {
     constructor(
@@ -28,11 +29,7 @@ export class ReminderService {
                     existingDay.reminders.push({
                         level: 2,
                         key: existingDay.reminders.length + 1,
-                        uniqueId: Number(
-                            Math.floor(Math.random() * 1e10)
-                                .toString()
-                                .padStart(10, "0"),
-                        ),
+                        uniqueId: Number.parseInt(randomBytes(8).toString("hex"), 16),
                         medication: formData.medicationName,
                         hour: formData.hour,
                     });
@@ -40,21 +37,13 @@ export class ReminderService {
                     existingData.reminderList.push({
                         level: 1,
                         key: existingData.reminderList.length + 1,
-                        uniqueId: Number(
-                            Math.floor(Math.random() * 1e10)
-                                .toString()
-                                .padStart(10, "0"),
-                        ),
+                        uniqueId: Number.parseInt(randomBytes(8).toString("hex"), 16),
                         dayOfWeek: dayOfWeek,
                         reminders: [
                             {
                                 level: 2,
                                 key: 1,
-                                uniqueId: Number(
-                                    Math.floor(Math.random() * 1e10)
-                                        .toString()
-                                        .padStart(10, "0"),
-                                ),
+                                uniqueId: Number.parseInt(randomBytes(8).toString("hex"), 16),
                                 medication: formData.medicationName,
                                 hour: formData.hour,
                             },
@@ -63,11 +52,7 @@ export class ReminderService {
                 }
             });
         } else {
-            const newUniqueId = Number(
-                Math.floor(Math.random() * 1e10)
-                    .toString()
-                    .padStart(10, "0"),
-            );
+            const newUniqueId = Number.parseInt(randomBytes(8).toString("hex"), 16);
 
             const newData = {
                 level: 0,
@@ -78,21 +63,13 @@ export class ReminderService {
                     return {
                         level: 1,
                         key: index + 1,
-                        uniqueId: Number(
-                            Math.floor(Math.random() * 1e10)
-                                .toString()
-                                .padStart(10, "0"),
-                        ),
+                        uniqueId: Number.parseInt(randomBytes(8).toString("hex"), 16),
                         dayOfWeek: dayOfWeek,
                         reminders: [
                             {
                                 level: 2,
                                 key: 1,
-                                uniqueId: Number(
-                                    Math.floor(Math.random() * 1e10)
-                                        .toString()
-                                        .padStart(10, "0"),
-                                ),
+                                uniqueId: Number.parseInt(randomBytes(8).toString("hex"), 16),
                                 medication: formData.medicationName,
                                 hour: formData.hour,
                             },
