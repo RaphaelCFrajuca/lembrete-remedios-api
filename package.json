@@ -94,6 +94,9 @@
       "!src/guards/**/*.ts",
       "!src/LembreteRemediosModule.ts",
       "!src/ModuleFactorys.ts",
+      "!src/database/DatabaseProvider.ts",
+      "!src/database/services/*.ts",
+      "!src/*/*Provider.ts",
       "!dist/**",
       "!test/**/*.ts",
       "!node_modules/**"

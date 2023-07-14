@@ -88,6 +88,14 @@ describe("UserController (e2e)", () => {
             expect(response.body).toEqual(mockUser);
         });
 
+        it("should return the user when not passing email in query", async () => {
+            jest.spyOn(console, "log").mockImplementation(() => null);
+
+            await databaseProvider.registerUser(mockUser);
+            const response = await request(app.getHttpServer()).get("/user");
+            expect(response.body).toEqual(mockUser);
+        });
+
         it("should not return the user when email not exist", async () => {
             jest.spyOn(console, "log").mockImplementation(() => null);
 
@@ -110,6 +118,14 @@ describe("UserController (e2e)", () => {
             const response = await request(app.getHttpServer()).get("/user/validate").query({
                 email: mockUser.email,
             });
+            expect(response.body).toEqual({ userFound: true });
+        });
+
+        it("should return true when user exists and not passing email in query", async () => {
+            jest.spyOn(console, "log").mockImplementation(() => null);
+
+            await databaseProvider.registerUser(mockUser);
+            const response = await request(app.getHttpServer()).get("/user/validate");
             expect(response.body).toEqual({ userFound: true });
         });
 
