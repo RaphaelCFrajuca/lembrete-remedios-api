@@ -195,12 +195,12 @@ export class ReminderService {
     async schedule() {
         const { dayWeek, actualHour } = this.getDateHourUTCMinus3();
         const remindersToSchedule = [];
-        (await this.databaseService.getAllReminders()).map((item: Reminder) => {
-            return (item.reminders as ReminderUser[]).map((reminderUser: ReminderUser) => {
-                return reminderUser.reminderList.map((reminderList: ReminderList) => {
+        (await this.databaseService.getAllReminders()).forEach((item: Reminder) => {
+            (item.reminders as ReminderUser[]).forEach((reminderUser: ReminderUser) => {
+                reminderUser.reminderList.forEach((reminderList: ReminderList) => {
                     if (dayWeek === reminderList.dayOfWeek) {
                         const reminderMedication: ReminderMedication[] = [];
-                        return reminderList.reminders.map((reminder: ReminderMedication) => {
+                        reminderList.reminders.forEach((reminder: ReminderMedication) => {
                             if (reminder.hour === actualHour) {
                                 reminderMedication.push(reminder);
                                 remindersToSchedule.push({
@@ -208,16 +208,11 @@ export class ReminderService {
                                     name: reminderUser.name,
                                     reminders: reminderMedication,
                                 });
-                                return {
-                                    email: item.email,
-                                    name: reminderUser.name,
-                                    reminders: reminderMedication,
-                                };
                             }
-                        })[0] as ReminderToSchedule;
+                        });
                     }
-                })[0];
-            })[0];
+                });
+            });
         });
 
         if (remindersToSchedule.length === 0) {
