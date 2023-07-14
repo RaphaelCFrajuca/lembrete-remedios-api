@@ -29,7 +29,7 @@ export class UserGuard implements CanActivate {
                 secret: this.formatMultilineCert(this.jwtPublicCert),
             });
             request["user"] = payload;
-            Logger.log(`User ${payload.email} authenticated`, [request, this]);
+            Logger.notice(`User ${payload.email} authenticated`, [request, this]);
         } catch {
             Logger.error(`Unauthorized`, [request, this]);
             throw new UnauthorizedException();

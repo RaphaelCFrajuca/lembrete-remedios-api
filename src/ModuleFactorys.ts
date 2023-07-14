@@ -24,7 +24,7 @@ export function databaseFactory(
     mysqlDatabaseName: string,
 ): DatabaseProvider {
     if (!databaseProvider) {
-        Logger.warn(`No database provider setted, using default ${DatabaseProviderType.DEFAULT} provider`, { databaseProvider, this: this });
+        Logger.notice(`No database provider setted, using default ${DatabaseProviderType.DEFAULT} provider`, { databaseProvider, this: this });
         databaseProvider = DatabaseProviderType.DEFAULT;
     }
     const provider = DatabaseProviderMap[databaseProvider];
@@ -33,7 +33,7 @@ export function databaseFactory(
 
 export function pubSubFactory(pubSubProvider: string, googleTopicName: string, amazonTopicName: string, amazonCredentials: PubSubCredentials): PubSubProvider {
     if (!pubSubProvider) {
-        Logger.warn(`No Pub/Sub provider setted, using default ${PubSubProviderType.DEFAULT} provider`, { pubSubProvider, this: this });
+        Logger.notice(`No Pub/Sub provider setted, using default ${PubSubProviderType.DEFAULT} provider`, { pubSubProvider, this: this });
         pubSubProvider = PubSubProviderType.DEFAULT;
     }
 

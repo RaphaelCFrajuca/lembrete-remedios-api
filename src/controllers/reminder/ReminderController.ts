@@ -53,7 +53,7 @@ export class ReminderController {
 
     @Post("send")
     async send(@Body() body: PubSubRequestDto, @Res() res, @Request() request) {
-        Logger.log("Pub/Sub Request", { body, headers: request.headers });
+        Logger.notice("Pub/Sub Request", { body, headers: request.headers });
         if (request.headers["content-type"] !== "application/json") {
             res.status(HttpStatus.FORBIDDEN).json({ status: "error", message: "Invalid Content-Type" });
             return;
