@@ -1,6 +1,6 @@
 import { HttpStatus, Inject } from "@nestjs/common";
 import { DatabaseProvider } from "database/DatabaseProvider";
-import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderToSchedule, ReminderUser } from "interfaces/ReminderInterface";
+import { Reminder, ReminderBase, ReminderList, ReminderMedication, ReminderUser } from "interfaces/ReminderInterface";
 import { Logger } from "utils/Logger";
 import { ChannelService, MessageData } from "interfaces/ChannelInterface";
 import { PubSubProvider } from "pubsub/PubSubProvider";
