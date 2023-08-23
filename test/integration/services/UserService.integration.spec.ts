@@ -49,6 +49,31 @@ describe("UserService (integration)", () => {
             expect(result).toEqual(mockUser);
         });
 
+        it("should have the correct properties", () => {
+            expect(mockUser).toHaveProperty("nickname");
+            expect(mockUser).toHaveProperty("name");
+            expect(mockUser).toHaveProperty("reminderChannel");
+            expect(mockUser).toHaveProperty("given_name");
+            expect(mockUser).toHaveProperty("family_name");
+            expect(mockUser).toHaveProperty("locale");
+            expect(mockUser).toHaveProperty("picture");
+            expect(mockUser).toHaveProperty("email");
+            expect(mockUser).toHaveProperty("phone");
+            expect(mockUser).toHaveProperty("email_verified");
+        });
+
+        it("should have the correct property types", () => {
+            expect(typeof mockUser.nickname).toBe("string");
+            expect(typeof mockUser.name).toBe("string");
+            expect(typeof mockUser.given_name).toBe("string");
+            expect(typeof mockUser.family_name).toBe("string");
+            expect(typeof mockUser.locale).toBe("string");
+            expect(typeof mockUser.picture).toBe("string");
+            expect(typeof mockUser.email).toBe("string");
+            expect(typeof mockUser.phone).toBe("string");
+            expect(typeof mockUser.email_verified).toBe("boolean");
+        });
+
         it("should return null when find an not existing user", async () => {
             const result = await userService.findByEmail("fake-not-exist@fake.com");
             expect(result).toEqual(null);
