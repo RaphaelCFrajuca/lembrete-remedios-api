@@ -1,8 +1,8 @@
 {
   "name": "lembrete-remedios-api",
   "version": "1.0.0",
-  "description": "",
-  "author": "",
+  "description": "Apache License 2.0",
+  "author": "Raphael Frajuca",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
