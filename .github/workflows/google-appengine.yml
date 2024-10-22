@@ -132,7 +132,7 @@ jobs:
       - name: Test the Nest.js app
         run: npm run test:cov
 
-      - name: SonarCloud Scan
+      - name: SonarCloud Scan 
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
