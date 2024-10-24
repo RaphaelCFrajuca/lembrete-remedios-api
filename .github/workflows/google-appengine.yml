@@ -1,144 +1,144 @@
 name: Deploy to Google App Engine
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+            - name: Cache node_modules
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
-      - name: Generate env file
-        env:
-          DATABASE_PROVIDER: ${{ vars.DATABASE_PROVIDER }}
+            - name: Generate env file
+              env:
+                  DATABASE_PROVIDER: ${{ vars.DATABASE_PROVIDER }}
 
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          MONGODB_DATABASE_NAME: ${{ vars.MONGODB_DATABASE_NAME }}
+                  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+                  MONGODB_DATABASE_NAME: ${{ vars.MONGODB_DATABASE_NAME }}
 
-          MYSQL_HOST: ${{ vars.MYSQL_HOST }}
-          MYSQL_PORT: ${{ vars.MYSQL_PORT }}
-          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE_NAME: ${{ vars.MYSQL_DATABASE_NAME }}
+                  MYSQL_HOST: ${{ vars.MYSQL_HOST }}
+                  MYSQL_PORT: ${{ vars.MYSQL_PORT }}
+                  MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+                  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+                  MYSQL_DATABASE_NAME: ${{ vars.MYSQL_DATABASE_NAME }}
 
-          JWT_PUBLIC_CERT: ${{ secrets.JWT_PUBLIC_CERT }}
+                  JWT_PUBLIC_CERT: ${{ secrets.JWT_PUBLIC_CERT }}
 
-          PUBSUB_PROVIDER: ${{ vars.PUBSUB_PROVIDER }}
+                  PUBSUB_PROVIDER: ${{ vars.PUBSUB_PROVIDER }}
 
-          GOOGLE_PUBSUB_TOPIC_NAME: ${{ vars.GOOGLE_PUBSUB_TOPIC_NAME }}
+                  GOOGLE_PUBSUB_TOPIC_NAME: ${{ vars.GOOGLE_PUBSUB_TOPIC_NAME }}
 
-          AMAZON_PUBSUB_TOPIC_NAME: ${{ vars.AMAZON_PUBSUB_TOPIC_NAME }}
-          AMAZON_PUBSUB_ACCESS_KEY_ID: ${{ secrets.AMAZON_PUBSUB_ACCESS_KEY_ID }}
-          AMAZON_PUBSUB_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_PUBSUB_SECRET_ACCESS_KEY }}
-          AMAZON_REGION: ${{ vars.AMAZON_REGION }}
+                  AMAZON_PUBSUB_TOPIC_NAME: ${{ vars.AMAZON_PUBSUB_TOPIC_NAME }}
+                  AMAZON_PUBSUB_ACCESS_KEY_ID: ${{ secrets.AMAZON_PUBSUB_ACCESS_KEY_ID }}
+                  AMAZON_PUBSUB_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_PUBSUB_SECRET_ACCESS_KEY }}
+                  AMAZON_REGION: ${{ vars.AMAZON_REGION }}
 
-          EMAIL_CHANNEL_PROVIDER: ${{ vars.EMAIL_CHANNEL_PROVIDER }}
+                  EMAIL_CHANNEL_PROVIDER: ${{ vars.EMAIL_CHANNEL_PROVIDER }}
 
-          AMAZON_SES_ACCESS_KEY_ID: ${{ secrets.AMAZON_SES_ACCESS_KEY_ID }}
-          AMAZON_SES_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_SES_SECRET_ACCESS_KEY }}
-          AMAZON_SES_REGION: ${{ vars.AMAZON_SES_REGION }}
+                  AMAZON_SES_ACCESS_KEY_ID: ${{ secrets.AMAZON_SES_ACCESS_KEY_ID }}
+                  AMAZON_SES_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_SES_SECRET_ACCESS_KEY }}
+                  AMAZON_SES_REGION: ${{ vars.AMAZON_SES_REGION }}
 
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          BREVO_API_URL: ${{ vars.BREVO_API_URL }}
+                  BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+                  BREVO_API_URL: ${{ vars.BREVO_API_URL }}
 
-          SMS_CHANNEL_PROVIDER: ${{ vars.SMS_CHANNEL_PROVIDER }}
-          MOBIZON_API_KEY: ${{ secrets.MOBIZON_API_KEY }}
-          MOBIZON_API_URL: ${{ vars.MOBIZON_API_URL }}
+                  SMS_CHANNEL_PROVIDER: ${{ vars.SMS_CHANNEL_PROVIDER }}
+                  MOBIZON_API_KEY: ${{ secrets.MOBIZON_API_KEY }}
+                  MOBIZON_API_URL: ${{ vars.MOBIZON_API_URL }}
 
-          VOICEMAIL_CHANNEL_PROVIDER: ${{ vars.VOICEMAIL_CHANNEL_PROVIDER }}
-          NVOIP_SID: ${{ secrets.NVOIP_SID }}
-          NVOIP_USER_TOKEN: ${{ secrets.NVOIP_USER_TOKEN }}
-          NVOIP_API_URL: ${{ vars.NVOIP_API_URL }}
-        run: |-
-          echo "DATABASE_PROVIDER=$DATABASE_PROVIDER" > .env-for-app-yaml
+                  VOICEMAIL_CHANNEL_PROVIDER: ${{ vars.VOICEMAIL_CHANNEL_PROVIDER }}
+                  NVOIP_SID: ${{ secrets.NVOIP_SID }}
+                  NVOIP_USER_TOKEN: ${{ secrets.NVOIP_USER_TOKEN }}
+                  NVOIP_API_URL: ${{ vars.NVOIP_API_URL }}
+              run: |-
+                  echo "DATABASE_PROVIDER=$DATABASE_PROVIDER" > .env-for-app-yaml
 
-          echo "MONGODB_URI=$MONGODB_URI" >> .env-for-app-yaml
-          echo "MONGODB_DATABASE_NAME=$MONGODB_DATABASE_NAME" >> .env-for-app-yaml
+                  echo "MONGODB_URI=$MONGODB_URI" >> .env-for-app-yaml
+                  echo "MONGODB_DATABASE_NAME=$MONGODB_DATABASE_NAME" >> .env-for-app-yaml
 
-          echo "MYSQL_HOST=$MYSQL_HOST" >> .env-for-app-yaml
-          echo "MYSQL_PORT=$MYSQL_PORT" >> .env-for-app-yaml
-          echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .env-for-app-yaml
-          echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env-for-app-yaml
-          echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
+                  echo "MYSQL_HOST=$MYSQL_HOST" >> .env-for-app-yaml
+                  echo "MYSQL_PORT=$MYSQL_PORT" >> .env-for-app-yaml
+                  echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .env-for-app-yaml
+                  echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env-for-app-yaml
+                  echo "MYSQL_DATABASE_NAME=$MYSQL_DATABASE_NAME" >> .env-for-app-yaml
 
-          echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
+                  echo "JWT_PUBLIC_CERT=$JWT_PUBLIC_CERT" >> .env-for-app-yaml
 
-          echo "PUBSUB_PROVIDER=$PUBSUB_PROVIDER" >> .env-for-app-yaml
+                  echo "PUBSUB_PROVIDER=$PUBSUB_PROVIDER" >> .env-for-app-yaml
 
-          echo "GOOGLE_PUBSUB_TOPIC_NAME=$GOOGLE_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
+                  echo "GOOGLE_PUBSUB_TOPIC_NAME=$GOOGLE_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
 
-          echo "AMAZON_PUBSUB_TOPIC_NAME=$AMAZON_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
-          echo "AMAZON_PUBSUB_ACCESS_KEY_ID=$AMAZON_PUBSUB_ACCESS_KEY_ID" >> .env-for-app-yaml
-          echo "AMAZON_PUBSUB_SECRET_ACCESS_KEY=$AMAZON_PUBSUB_SECRET_ACCESS_KEY" >> .env-for-app-yaml
-          echo "AMAZON_REGION=$AMAZON_REGION" >> .env-for-app-yaml
+                  echo "AMAZON_PUBSUB_TOPIC_NAME=$AMAZON_PUBSUB_TOPIC_NAME" >> .env-for-app-yaml
+                  echo "AMAZON_PUBSUB_ACCESS_KEY_ID=$AMAZON_PUBSUB_ACCESS_KEY_ID" >> .env-for-app-yaml
+                  echo "AMAZON_PUBSUB_SECRET_ACCESS_KEY=$AMAZON_PUBSUB_SECRET_ACCESS_KEY" >> .env-for-app-yaml
+                  echo "AMAZON_REGION=$AMAZON_REGION" >> .env-for-app-yaml
 
-          echo "EMAIL_CHANNEL_PROVIDER=$EMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
+                  echo "EMAIL_CHANNEL_PROVIDER=$EMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
 
-          echo "AMAZON_SES_ACCESS_KEY_ID=$AMAZON_SES_ACCESS_KEY_ID" >> .env-for-app-yaml
-          echo "AMAZON_SES_SECRET_ACCESS_KEY=$AMAZON_SES_SECRET_ACCESS_KEY" >> .env-for-app-yaml
-          echo "AMAZON_SES_REGION=$AMAZON_SES_REGION" >> .env-for-app-yaml
+                  echo "AMAZON_SES_ACCESS_KEY_ID=$AMAZON_SES_ACCESS_KEY_ID" >> .env-for-app-yaml
+                  echo "AMAZON_SES_SECRET_ACCESS_KEY=$AMAZON_SES_SECRET_ACCESS_KEY" >> .env-for-app-yaml
+                  echo "AMAZON_SES_REGION=$AMAZON_SES_REGION" >> .env-for-app-yaml
 
-          echo "BREVO_API_KEY=$BREVO_API_KEY" >> .env-for-app-yaml
-          echo "BREVO_API_URL=$BREVO_API_URL" >> .env-for-app-yaml
+                  echo "BREVO_API_KEY=$BREVO_API_KEY" >> .env-for-app-yaml
+                  echo "BREVO_API_URL=$BREVO_API_URL" >> .env-for-app-yaml
 
-          echo "SMS_CHANNEL_PROVIDER=$SMS_CHANNEL_PROVIDER" >> .env-for-app-yaml
-          echo "MOBIZON_API_KEY=$MOBIZON_API_KEY" >> .env-for-app-yaml
-          echo "MOBIZON_API_URL=$MOBIZON_API_URL" >> .env-for-app-yaml
+                  echo "SMS_CHANNEL_PROVIDER=$SMS_CHANNEL_PROVIDER" >> .env-for-app-yaml
+                  echo "MOBIZON_API_KEY=$MOBIZON_API_KEY" >> .env-for-app-yaml
+                  echo "MOBIZON_API_URL=$MOBIZON_API_URL" >> .env-for-app-yaml
 
-          echo "VOICEMAIL_CHANNEL_PROVIDER=$VOICEMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
-          echo "NVOIP_SID=$NVOIP_SID" >> .env-for-app-yaml
-          echo "NVOIP_USER_TOKEN=$NVOIP_USER_TOKEN" >> .env-for-app-yaml
-          echo "NVOIP_API_URL=$NVOIP_API_URL" >> .env-for-app-yaml
-  
-      - name: Prepare app.yaml
-        uses: mshick/fast-envsubst@v1
-        with:
-          env-file: .env-for-app-yaml
-          in-file: app.yaml.template
-          out-file: app.yaml
+                  echo "VOICEMAIL_CHANNEL_PROVIDER=$VOICEMAIL_CHANNEL_PROVIDER" >> .env-for-app-yaml
+                  echo "NVOIP_SID=$NVOIP_SID" >> .env-for-app-yaml
+                  echo "NVOIP_USER_TOKEN=$NVOIP_USER_TOKEN" >> .env-for-app-yaml
+                  echo "NVOIP_API_URL=$NVOIP_API_URL" >> .env-for-app-yaml
 
-      - name: Show app.yaml
-        run: cat app.yaml
+            - name: Prepare app.yaml
+              uses: mshick/fast-envsubst@v1
+              with:
+                  env-file: .env-for-app-yaml
+                  in-file: app.yaml.template
+                  out-file: app.yaml
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          
-      - name: 'Auth'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH }}
-          
-      - name: Install dependencies
-        run: npm install
+            - name: Show app.yaml
+              run: cat app.yaml
 
-      - name: Build the Nest.js app
-        run: npm run build
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 20
 
-      - name: Test the Nest.js app
-        run: npm run test:cov
+            - name: "Auth"
+              uses: "google-github-actions/auth@v1"
+              with:
+                  credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
-      - name: SonarCloud Scan 
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            - name: Install dependencies
+              run: npm install
 
-      - name: Configure gcloud CLI
-        uses: google-github-actions/deploy-appengine@v1
-        with:
-          project_id: ${{ secrets.PROJECT_ID }}
+            - name: Build the Nest.js app
+              run: npm run build
+
+            - name: Test the Nest.js app
+              run: npm run test:cov
+
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+            - name: Configure gcloud CLI
+              uses: google-github-actions/deploy-appengine@v1
+              with:
+                  project_id: ${{ secrets.PROJECT_ID }}
